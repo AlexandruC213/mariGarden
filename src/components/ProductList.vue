@@ -9,21 +9,18 @@
 
 <script>
 import ProductItem from "@/components/ProductItem.vue";
-import EventServices from "@/services/EventServices.js";
+import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
     ProductItem,
   },
-  data() {
-    return {
-      products: [],
-    };
-  },
+  methods: mapActions("product", ["getProducts"]),
+  computed: mapState({
+    products: (state) => state.product.products,
+  }),
   created() {
-    EventServices.getProducts()
-      .then((response) => (this.products = response.data))
-      .catch((error) => "There was an error: " + error.response);
+    this.getProducts();
   },
 };
 </script>

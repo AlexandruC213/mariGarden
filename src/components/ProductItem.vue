@@ -19,7 +19,7 @@
             <button class="btn-details">Details</button>
           </router-link>
           <Cart>
-            <button slot="button" @click="addToCart" class="btn-addToCart">
+            <button slot="button" @click="addProd" class="btn-addToCart">
               <span slot="type">Add to Cart</span>
             </button>
           </Cart>
@@ -30,36 +30,34 @@
 </template>
 
 <script>
-import eventBus from "../eventBus";
+import { mapState } from "vuex";
 
 export default {
   props: {
-    prod: Object,
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    addToCart() {
-      const item = {
-        prod: this.prod,
-        quantity: 1,
-      };
-      eventBus.$emit("product-added", item);
+    prod: {
+      type: Object,
     },
   },
+  methods: {
+    addProd() {
+      this.$store.dispatch("cart/addProduct", this.prod);
+    },
+  },
+  computed: mapState(["cart"]),
 };
 </script>
 
 <style scoped>
 .container {
-  max-width: 400px;
+  min-width: 300px;
   margin-top: 50px;
 }
 
 .product-container {
   width: 250px;
   height: 300px;
+
+  margin-top: 2em;
 
   border: 1px solid black;
   border-width: thin;

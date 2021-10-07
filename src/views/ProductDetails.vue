@@ -2,19 +2,19 @@
   <div class="productDetails-container">
     <div
       class="image-container"
-      :style="{ backgroundImage: `url(${prod.image})` }"
+      :style="{ backgroundImage: `url(${product.image})` }"
     >
       <div class="details-container">
         <div class="title-price">
-          <p>{{ prod.title }}</p>
-          <p>{{ prod.price }}</p>
+          <p>{{ product.title }}</p>
+          <p>{{ product.price }}</p>
         </div>
         <div class="description">
-          <p>{{ prod.longDesc }}</p>
+          <p>{{ product.longDesc }}</p>
         </div>
         <div class="rating-btnBuy">
           <p>Rating: 5/5</p>
-          <button @click="addToCart">
+          <button @click="addProd">
             <i class="fas fa-shopping-cart"></i> Buy
           </button>
         </div>
@@ -24,36 +24,27 @@
 </template>
 
 <script>
-import EventServices from "@/services/EventServices.js";
-import eventBus from "../eventBus.js";
+import { mapState } from "vuex";
 
 export default {
   props: {
     id: {
-      type: Number,
+      type: [Number, String],
       required: true,
     },
   },
-  data() {
-    return {
-      prod: {},
-    };
-  },
   methods: {
-    addToCart() {
-      const item = {
-        prod: this.prod,
-        quantity: 1,
-      };
-      eventBus.$emit("product-added", item);
+    addProd() {
+      this.$store.dispatch("cart/addProduct", this.product);
     },
   },
+  computed: {
+    ...mapState({
+      product: (state) => state.product.product,
+    }),
+  },
   created() {
-    EventServices.getProductDetails(this.id)
-      .then((response) => {
-        this.prod = response.data;
-      })
-      .catch((error) => console.log(error.message));
+    this.$store.dispatch("product/getProduct", this.id);
   },
 };
 </script>

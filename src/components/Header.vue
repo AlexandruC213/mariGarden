@@ -20,30 +20,30 @@
           <div slot="content" class="cart-content" v-show="isCardVisible">
             <div
               class="cart-details"
-              v-for="item in this.cartItems"
-              :key="item.prod.id"
+              v-for="product in this.cartItems"
+              :key="product.id"
             >
               <div class="img-prod">
-                <img :src="item.prod.image" alt="aici imagine" />
+                <img :src="product.image" alt="aici imagine" />
               </div>
               <div class="details-prod">
-                <p>{{ item.prod.title }} x{{ item.quantity }}</p>
-                <p class="details-small">{{ item.prod.shortDesc }}</p>
-                <p class="details-small">{{ item.prod.price }}</p>
+                <p>{{ product.title }} x{{ product.quantity }}</p>
+                <p class="details-small">{{ product.shortDesc }}</p>
+                <p class="details-small">{{ product.price }}</p>
               </div>
               <div class="control-buttons">
                 <CartIcons>
-                  <button slot="button" @click="editItem(item, '+')">
+                  <button slot="button" @click="addProduct(product)">
                     <span slot="sign"><i class="fas fa-plus"></i></span>
                   </button>
                 </CartIcons>
                 <CartIcons>
-                  <button slot="button" @click="editItem(item, '-')">
+                  <button slot="button" @click="subtractProduct(product)">
                     <span slot="sign"><i class="fas fa-minus"></i></span>
                   </button>
                 </CartIcons>
                 <CartIcons>
-                  <button slot="button" @click="editItem(item, '!')">
+                  <button slot="button" @click="deleteProduct(product)">
                     <span slot="sign"><i class="fas fa-times"></i></span>
                   </button>
                 </CartIcons>
@@ -51,7 +51,7 @@
             </div>
             <div class="cart-checkout">
               <div class="total">
-                <p>Total: ${{ total }}</p>
+                <p>Total: ${{ calculateTotal }}</p>
               </div>
               <router-link :to="{ name: 'checkout' }">
                 <div class="checkout-btn">
@@ -71,52 +71,27 @@
 
 <script>
 import CartIcons from "@/components/CartIcons.vue";
-import eventBus from "../eventBus.js";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
     CartIcons,
   },
-  props: {
-    cartItems: {
-      type: Array,
-      required: true,
-    },
-    total: {
-      type: Number,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      isCardVisible: false,
-      price: 0,
-    };
-  },
   methods: {
-    showCart() {
-      this.isCardVisible = !this.isCardVisible;
-    },
-    editItem(item, sign) {
-      function increment(item) {
-        eventBus.$emit("increment", item);
-      }
-
-      function decrement(item) {
-        eventBus.$emit("decrement", item);
-      }
-      function remove(item) {
-        eventBus.$emit("delete", item);
-      }
-
-      const operation = {
-        "+": increment,
-        "-": decrement,
-        "!": remove,
-      };
-
-      operation[sign](item);
-    },
+    ...mapActions("cart", [
+      "showCart",
+      "addProduct",
+      "subtractProduct",
+      "deleteProduct",
+    ]),
+  },
+  computed: {
+    ...mapGetters("cart", ["calculateTotal"]),
+    ...mapState({
+      cartItems: (state) => state.cart.cartItems,
+      total: (state) => state.cart.total,
+      isCardVisible: (state) => state.cart.isCardVisible,
+    }),
   },
 };
 </script>

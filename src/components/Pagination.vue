@@ -15,7 +15,11 @@
     >
 
     <template v-if="lastPage">
-      <Links :productsPage="productsPage" :page="page" :sign="nextPageSign"
+      <Links
+        :productsPage="productsPage"
+        :page="page"
+        :sign="nextPageSign"
+        :lastPage="lastPage"
         ><i class="fas fa-arrow-right"></i
       ></Links>
     </template>

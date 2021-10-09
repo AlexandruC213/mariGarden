@@ -31,7 +31,7 @@ export const actions = {
   showCart({ commit }) {
     commit("SHOW_CART");
   },
-  addProduct({ commit, getters }, product) {
+  addProduct({ commit, getters, dispatch }, product) {
     let prodIndex = getters.findProductIndex(product.id);
 
     let exists = getters.checkCartforProduct(product.id);
@@ -40,6 +40,11 @@ export const actions = {
       commit("INCREMENT_QUANTITY", prodIndex);
     } else {
       commit("ADD_PRODUCT_TO_CART", product);
+      const notification = {
+        type: "success",
+        message: "Product was successfully added to cart!",
+      };
+      dispatch("notification/addNotification", notification, { root: true });
     }
   },
 
@@ -52,10 +57,15 @@ export const actions = {
     }
   },
 
-  deleteProduct({ commit, getters }, product) {
+  deleteProduct({ commit, getters, dispatch }, product) {
     let prodIndex = getters.findProductIndex(product.id);
     product.quantity = 1;
     commit("DELETE_PRODUCT_FROM_CART", prodIndex);
+    const notification = {
+      type: "success",
+      message: "Product was successfully deleted from cart!",
+    };
+    dispatch("notification/addNotification", notification, { root: true });
   },
 };
 

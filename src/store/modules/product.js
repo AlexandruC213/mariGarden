@@ -21,17 +21,21 @@ export const mutations = {
 };
 
 export const actions = {
-  getProducts({ commit }, { perPage, page }) {
+  getProducts({ commit, dispatch }, { perPage, page }) {
     EventServices.fetchProducts(perPage, page)
       .then((response) => {
         commit("SET_NUMBER_OF_PRODUCTS", response.headers["x-total-count"]);
         commit("SET_PRODUCTS", response.data);
       })
       .catch((error) => {
-        console.log(error);
+        const notification = {
+          type: "error",
+          message: "There was a problem fetching products: " + error.message,
+        };
+        dispatch("notification/addNotification", notification, { root: true });
       });
   },
-  getProduct({ commit, getters }, id) {
+  getProduct({ commit, getters, dispatch }, id) {
     let product = getters.getProductById(id);
 
     // facem doar un api call
@@ -45,7 +49,13 @@ export const actions = {
           commit("SET_PRODUCT_DETAILS", response.data);
         })
         .catch((error) => {
-          console.log(error.message);
+          const notification = {
+            type: "error",
+            message: "There was a problem fetching product: " + error.message,
+          };
+          dispatch("notification/addNotification", notification, {
+            root: true,
+          });
         });
     }
   },

@@ -4,6 +4,7 @@
       <Header />
     </div>
     <router-view :key="$route.fullPath" />
+    <NotificationContainer />
     <Footer class="footer" />
   </div>
 </template>
@@ -11,11 +12,13 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import NotificationContainer from "@/components/NotificationContainer.vue";
 
 export default {
   components: {
     Header,
     Footer,
+    NotificationContainer,
   },
 };
 </script>

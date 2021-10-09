@@ -12,6 +12,7 @@ export default {
     page: Number,
     sign: String,
     productsPage: String,
+    lastPage: Boolean,
   },
   methods: {
     setPage() {
@@ -28,11 +29,6 @@ export default {
       this.productsPage === "products" ? this.productsPage : "home";
     },
   },
-  computed: {
-    currentPage() {
-      return this.page === 1;
-    },
-  },
 };
 </script>
 
@@ -42,20 +38,24 @@ export default {
   height: 50px;
   margin: 0 3px;
   border-radius: 50%;
-  cursor: pointer;
   border: 1px solid black;
 }
 
 .link-container .link {
-  color: var(--black);
-  text-decoration: none;
+  width: 100%;
   height: 100%;
+  border-radius: 50%;
+
+  text-decoration: none;
+  color: var(--black);
+  background-color: var(--white);
+
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.link-container:hover {
+.link-container .link:hover {
   background-color: rgba(0, 0, 0, 0.15);
 }
 

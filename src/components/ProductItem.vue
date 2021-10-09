@@ -3,19 +3,19 @@
     <div class="product-container">
       <div
         class="image-container"
-        :style="{ backgroundImage: `url(${prod.image})` }"
+        :style="{ backgroundImage: `url(${product.image})` }"
       >
         <div class="over-image">
-          <p class="title-product">{{ prod.title }}</p>
-          <p class="price-product">${{ prod.price }}</p>
+          <p class="title-product">{{ product.title }}</p>
+          <p class="price-product">${{ product.price }}</p>
         </div>
       </div>
       <div class="details-container">
         <div class="description">
-          <p>{{ prod.shortDesc }}</p>
+          <p>{{ product.shortDesc }}</p>
         </div>
         <div class="product-buttons">
-          <router-link :to="{ name: 'details', params: { id: prod.id } }">
+          <router-link :to="{ name: 'details', params: { id: product.id } }">
             <button class="btn-details">Details</button>
           </router-link>
           <Cart>
@@ -34,13 +34,11 @@ import { mapState } from "vuex";
 
 export default {
   props: {
-    prod: {
-      type: Object,
-    },
+    product: Object,
   },
   methods: {
     addProd() {
-      this.$store.dispatch("cart/addProduct", this.prod);
+      this.$store.dispatch("cart/addProduct", this.product);
     },
   },
   computed: mapState(["cart"]),
@@ -54,7 +52,7 @@ export default {
 }
 
 .product-container {
-  width: 250px;
+  width: 300px;
   height: 300px;
 
   margin-top: 2em;
@@ -65,7 +63,7 @@ export default {
 }
 
 .product-container .image-container {
-  height: 70%;
+  height: 200px;
 
   background-repeat: no-repeat;
   background-position: center;
@@ -100,7 +98,7 @@ export default {
 }
 
 .product-container .details-container {
-  height: 30%;
+  height: 33%;
 
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;

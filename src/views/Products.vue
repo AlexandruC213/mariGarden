@@ -1,6 +1,6 @@
 <template>
   <div class="products">
-    <ProductList />
+    <ProductList :productsPage="productsPage" />
   </div>
 </template>
 
@@ -10,6 +10,11 @@ import ProductList from "@/components/ProductList.vue";
 export default {
   components: {
     ProductList,
+  },
+  data() {
+    return {
+      productsPage: "products",
+    };
   },
 };
 </script>

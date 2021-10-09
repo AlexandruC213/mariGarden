@@ -35,6 +35,60 @@
       "shortDesc": "Descriere",
       "longDesc": "This is just a longer description of the product",
       "image": "https://www.flyingflowers.co.uk/ff_images/orchids.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Carnation",
+      "price": "11.33",
+      "quantity": 1,
+      "shortDesc": "Descriere",
+      "longDesc": "This is just a longer description of the product",
+      "image": "https://www.flyingflowers.co.uk/ff_images/carnation.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Fressia",
+      "price": "13.00",
+      "quantity": 1,
+      "shortDesc": "Descriere",
+      "longDesc": "This is just a longer description of the product",
+      "image": "https://www.flyingflowers.co.uk/ff_images/freesia.jpg"
+    },
+    {
+      "id": 7,
+      "title": "Hyacinth",
+      "price": "12.80",
+      "quantity": 1,
+      "shortDesc": "Descriere",
+      "longDesc": "This is just a longer description of the product",
+      "image": "https://www.flyingflowers.co.uk/ff_images/hyacynth.jpg"
+    },
+    {
+      "id": 8,
+      "title": "Chrysanthemum",
+      "price": "18.00",
+      "quantity": 1,
+      "shortDesc": "Descriere",
+      "longDesc": "This is just a longer description of the product",
+      "image": "https://www.flyingflowers.co.uk/ff_images/Chrysanthemums.jpg"
+    },
+    {
+      "id": 9,
+      "title": "Gladiolus",
+      "price": "5.22",
+      "quantity": 1,
+      "shortDesc": "Descriere",
+      "longDesc": "This is just a longer description of the product",
+      "image": "https://www.flyingflowers.co.uk/ff_images/Gladiolus.jpg"
+    },
+    {
+      "id": 10,
+      "title": "Gerbera",
+      "price": "9.99",
+      "quantity": 1,
+      "shortDesc": "Descriere",
+      "longDesc": "This is just a longer description of the product",
+      "image": "https://www.blumigo.de/wp-content/uploads/2015/05/Gerbera-mini-Kimsey-1.jpg"
     }
   ]
 }

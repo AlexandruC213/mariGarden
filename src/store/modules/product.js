@@ -5,6 +5,7 @@ export const namespaced = true;
 export const state = {
   products: [],
   product: {},
+  numberOfProducts: null,
 };
 
 export const mutations = {
@@ -14,12 +15,16 @@ export const mutations = {
   SET_PRODUCT_DETAILS(state, product) {
     state.product = product;
   },
+  SET_NUMBER_OF_PRODUCTS(state, number) {
+    state.numberOfProducts = number;
+  },
 };
 
 export const actions = {
-  getProducts({ commit }) {
-    EventServices.fetchProducts()
+  getProducts({ commit }, { perPage, page }) {
+    EventServices.fetchProducts(perPage, page)
       .then((response) => {
+        commit("SET_NUMBER_OF_PRODUCTS", response.headers["x-total-count"]);
         commit("SET_PRODUCTS", response.data);
       })
       .catch((error) => {
@@ -29,7 +34,8 @@ export const actions = {
   getProduct({ commit, getters }, id) {
     let product = getters.getProductById(id);
 
-    // de ce e nevoie de asta de vazut videoclipul
+    // facem doar un api call
+    // Nu functioneaza !!!
 
     if (product) {
       commit("SET_PRODUCT_DETAILS", product);
@@ -47,6 +53,6 @@ export const actions = {
 
 export const getters = {
   getProductById: (state) => (id) => {
-    state.products.find((product) => product.id === id);
+    return state.products.find((product) => product.id === id);
   },
 };

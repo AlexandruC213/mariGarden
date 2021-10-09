@@ -14,6 +14,9 @@
         <Cart class="cart">
           <button slot="button" class="cart-btn" @click="showCart">
             <span slot="type">
+              <span class="number-products" v-show="numberItems > 0">{{
+                numberItems
+              }}</span>
               <i class="fas fa-shopping-cart"></i>
             </span>
           </button>
@@ -86,6 +89,9 @@ export default {
     ]),
   },
   computed: {
+    numberItems() {
+      return this.cartItems.length;
+    },
     ...mapGetters("cart", ["calculateTotal"]),
     ...mapState({
       cartItems: (state) => state.cart.cartItems,
@@ -167,7 +173,9 @@ export default {
 
 .cart-content {
   width: 350px;
+  max-height: 300px;
   color: #000;
+  overflow-y: auto;
 
   border-radius: 5px;
   background-color: var(--white);
@@ -176,16 +184,15 @@ export default {
   right: 15px;
   top: 56px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: inline-block;
 }
 
 .cart-content .cart-details {
-  width: 95%;
-  min-height: 64px;
-  padding: 10px 16px;
+  width: 90%;
+  min-height: 80px;
+
+  padding: 0px 16px;
+  margin: 5px 0;
 
   display: flex;
   justify-content: center;
@@ -205,7 +212,7 @@ export default {
 }
 
 .cart-content .cart-details .details-prod {
-  width: 30%;
+  width: 33%;
 }
 
 .cart-content .cart-details .details-prod .details-small {
@@ -213,9 +220,8 @@ export default {
   font-size: 0.85rem;
 }
 
-.cart-content .cart-details .img-prod,
-.cart-content .cart-details .control-buttons {
-  width: 25%;
+.cart-content .cart-details .img-prod {
+  width: 33%;
 
   display: flex;
   justify-content: center;
@@ -275,5 +281,17 @@ export default {
 .cart-content .cart-checkout .total p {
   font-size: 1.25rem;
   font-weight: 600;
+}
+
+.cart .cart-btn .number-products {
+  width: 20px;
+  height: 20px;
+
+  position: absolute;
+  top: 2px;
+  left: 0;
+
+  border-radius: 50%;
+  background-color: var(--orange);
 }
 </style>

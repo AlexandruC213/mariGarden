@@ -5,6 +5,7 @@
       rel="prev"
       tag="button"
       :disabled="disabledPrev"
+      v-if="numberOfPages != 0"
       ><i class="fas fa-arrow-left"></i
     ></router-link>
 
@@ -21,6 +22,7 @@
       rel="next"
       tag="button"
       :disabled="disabledNext"
+      v-if="numberOfPages != 0"
       ><i class="fas fa-arrow-right"></i
     ></router-link>
   </div>
@@ -38,12 +40,6 @@ export default {
   },
   components: {
     PageLinks,
-  },
-  data() {
-    return {
-      nextPageSign: "+",
-      prevPageSign: "-",
-    };
   },
   computed: {
     disabledPrev() {

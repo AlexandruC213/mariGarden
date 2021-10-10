@@ -38,9 +38,6 @@ export const actions = {
   getProduct({ commit, getters, dispatch }, id) {
     let product = getters.getProductById(id);
 
-    // facem doar un api call
-    // Nu functioneaza !!!
-
     if (product) {
       commit("SET_PRODUCT_DETAILS", product);
     } else {

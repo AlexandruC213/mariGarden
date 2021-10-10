@@ -27,7 +27,7 @@ export default {
   mounted() {
     this.timeout = setTimeout(
       () => this.deleteNotification(this.notification),
-      5000
+      2500
     );
   },
   beforeDestroy() {
@@ -38,14 +38,24 @@ export default {
 
 <style scoped>
 .notification {
-  margin: 16px 0 16px;
+  margin: 10px 0;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  font-size: 1rem;
 }
 
 .-text-error {
   color: red;
+  padding: 10px 15px;
+  border: 2px solid red;
 }
 
 .-text-success {
   color: var(--green);
+  padding: 10px 15px;
+  border: 2px solid var(--green);
 }
 </style>

@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import Cart from "@/components/Cart.vue";
+import "nprogress/nprogress.css";
 
 Vue.component("Cart", Cart);
 

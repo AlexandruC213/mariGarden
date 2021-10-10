@@ -24,27 +24,15 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   props: {
-    id: {
-      type: [Number, String],
-      required: true,
-    },
+    id: [Number, String],
+    product: Object,
   },
   methods: {
     addProd() {
       this.$store.dispatch("cart/addProduct", this.product);
     },
-  },
-  computed: {
-    ...mapState({
-      product: (state) => state.product.product,
-    }),
-  },
-  created() {
-    this.$store.dispatch("product/getProduct", this.id);
   },
 };
 </script>

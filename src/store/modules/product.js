@@ -6,6 +6,7 @@ export const state = {
   products: [],
   product: {},
   numberOfProducts: null,
+  perPage: 4,
 };
 
 export const mutations = {
@@ -21,8 +22,8 @@ export const mutations = {
 };
 
 export const actions = {
-  getProducts({ commit, dispatch }, { perPage, page }) {
-    EventServices.fetchProducts(perPage, page)
+  getProducts({ commit, dispatch, state }, { page }) {
+    return EventServices.fetchProducts(state.perPage, page)
       .then((response) => {
         commit("SET_NUMBER_OF_PRODUCTS", response.headers["x-total-count"]);
         commit("SET_PRODUCTS", response.data);
@@ -40,10 +41,12 @@ export const actions = {
 
     if (product) {
       commit("SET_PRODUCT_DETAILS", product);
+      return product;
     } else {
-      EventServices.fetchProductDetails(id)
+      return EventServices.fetchProductDetails(id)
         .then((response) => {
           commit("SET_PRODUCT_DETAILS", response.data);
+          return response.data;
         })
         .catch((error) => {
           const notification = {

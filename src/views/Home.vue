@@ -11,17 +11,42 @@
       </div>
     </div>
     <div class="product-list-container">
-      <ProductList />
+      <ProductList :page="page" />
     </div>
   </div>
 </template>
 
 <script>
 import ProductList from "@/components/ProductList.vue";
+import store from "@/store/index";
+
+function getPageProducts(routeTo, next) {
+  const currentPage = parseInt(routeTo.query.page) || 1;
+  store
+    .dispatch("product/getProducts", {
+      page: currentPage,
+    })
+    .then(() => {
+      routeTo.params.page = currentPage;
+      next();
+    });
+}
 
 export default {
   components: {
     ProductList,
+  },
+  props: {
+    page: {
+      type: Number,
+      required: true,
+    },
+  },
+  beforeRouteEnter(routeTo, routeFrom, next) {
+    getPageProducts(routeTo, next);
+  },
+  beforeRouteUpdate(routeTo, routeFrom, next) {
+    getPageProducts(routeTo, next);
   },
 };
 </script>

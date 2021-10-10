@@ -35,7 +35,6 @@ import { mapState } from "vuex";
 export default {
   props: {
     page: Number,
-    perPage: Number,
     productsPage: String,
   },
   components: {
@@ -59,6 +58,7 @@ export default {
     },
     ...mapState({
       numberProduct: (state) => state.product.numberOfProducts,
+      perPage: (state) => state.product.perPage,
     }),
   },
 };

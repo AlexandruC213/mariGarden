@@ -58,7 +58,7 @@
               </div>
               <router-link :to="{ name: 'checkout' }">
                 <div class="checkout-btn">
-                  <button :disabled="this.cartItems.length == 0">
+                  <button :disabled="numberItems == 0">
                     <span><i class="fas fa-shopping-basket"></i></span>
                     Checkout
                   </button>

@@ -1,33 +1,33 @@
 <template>
   <div class="pagination-container">
-    <template v-if="page > 1">
-      <Links :productsPage="productsPage" :page="page" :sign="prevPageSign"
-        ><i class="fas fa-arrow-left"></i
-      ></Links>
-    </template>
+    <router-link
+      :to="{ name: checkPage, query: { page: this.page - 1 } }"
+      rel="prev"
+      tag="button"
+      :disabled="disabledPrev"
+      ><i class="fas fa-arrow-left"></i
+    ></router-link>
 
-    <Links
-      :productsPage="productsPage"
+    <PageLinks
       v-for="page in numberOfPages"
       :key="page"
       :page="page"
-      >{{ page }}</Links
+      :checkPage="checkPage"
+      >{{ page }}</PageLinks
     >
 
-    <template v-if="lastPage">
-      <Links
-        :productsPage="productsPage"
-        :page="page"
-        :sign="nextPageSign"
-        :lastPage="lastPage"
-        ><i class="fas fa-arrow-right"></i
-      ></Links>
-    </template>
+    <router-link
+      :to="{ name: checkPage, query: { page: this.page + 1 } }"
+      rel="next"
+      tag="button"
+      :disabled="disabledNext"
+      ><i class="fas fa-arrow-right"></i
+    ></router-link>
   </div>
 </template>
 
 <script>
-import Links from "@/components/Links.vue";
+import PageLinks from "@/components/PageLinks.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -37,7 +37,7 @@ export default {
     productsPage: String,
   },
   components: {
-    Links,
+    PageLinks,
   },
   data() {
     return {
@@ -46,6 +46,15 @@ export default {
     };
   },
   computed: {
+    disabledPrev() {
+      return this.page == 1;
+    },
+    disabledNext() {
+      return !this.lastPage;
+    },
+    checkPage() {
+      return this.productsPage === "products" ? this.productsPage : "home";
+    },
     numberOfPages() {
       return Math.ceil(this.numberProduct / this.perPage);
     },
@@ -66,5 +75,32 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.pagination-container a,
+.pagination-container button {
+  width: 50px;
+  height: 50px;
+  margin: 0 3px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+.pagination-container button {
+  cursor: pointer;
+}
+
+.pagination-container button:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.pagination-container button:disabled {
+  cursor: not-allowed;
+}
+
+.pagination-container a.router-link-exact-active {
+  border-radius: 50%;
+  background-color: var(--green);
+  color: var(--white);
 }
 </style>

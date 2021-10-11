@@ -5,7 +5,7 @@ const apiClient = axios.create({
   withCredentials: false,
   headers: {
     Accept: "apliction/json",
-    "Content-Type": "aplication/json",
+    "Content-Type": "application/json",
   },
   timeout: 10000,
 });
@@ -16,5 +16,14 @@ export default {
   },
   fetchProductDetails(id) {
     return apiClient.get("/products/" + id);
+  },
+  fetchAllProducts() {
+    return apiClient.get("/products");
+  },
+  fetchReviews() {
+    return apiClient.get("/reviews");
+  },
+  postReview(review) {
+    return apiClient.post("/reviews", review);
   },
 };

@@ -4,6 +4,7 @@ export const namespaced = true;
 
 export const state = {
   products: [],
+  allProducts: [],
   product: {},
   numberOfProducts: null,
   perPage: 4,
@@ -18,6 +19,9 @@ export const mutations = {
   },
   SET_NUMBER_OF_PRODUCTS(state, number) {
     state.numberOfProducts = number;
+  },
+  SET_ALL_PRODUCTS(state, allProducts) {
+    state.allProducts = allProducts;
   },
 };
 
@@ -48,6 +52,12 @@ export const actions = {
         return response.data;
       });
     }
+  },
+  getAllProducts({ commit }) {
+    return EventServices.fetchAllProducts().then((response) => {
+      commit("SET_ALL_PRODUCTS", response.data);
+      return response.data;
+    });
   },
 };
 

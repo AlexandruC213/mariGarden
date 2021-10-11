@@ -46,6 +46,18 @@ const routes = [
     component: () => import("../views/Checkout.vue"),
   },
   {
+    path: "/reviews",
+    name: "reviews",
+    component: () => import("../views/Reviews.vue"),
+    props: true,
+    beforeEnter(routeTo, routeFrom, next) {
+      store.dispatch("product/getAllProducts").then((allProducts) => {
+        routeTo.params.allProducts = allProducts;
+        next();
+      });
+    },
+  },
+  {
     path: "/404",
     name: "404",
     component: () => import("../views/errors/NotFound.vue"),

@@ -90,5 +90,21 @@
       "longDesc": "This is just a longer description of the product",
       "image": "https://www.blumigo.de/wp-content/uploads/2015/05/Gerbera-mini-Kimsey-1.jpg"
     }
+  ],
+  "reviews": [
+    {
+      "id": 5427612,
+      "productSelected": "Hyacinth",
+      "title": "test",
+      "description": "test",
+      "rating": "4"
+    },
+    {
+      "id": 5997079,
+      "productSelected": "Rose",
+      "title": "Nice",
+      "description": "Nice 2",
+      "rating": "5"
+    }
   ]
 }

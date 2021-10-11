@@ -10,6 +10,9 @@
       <div class="link">
         <router-link :to="{ name: 'products' }">Products</router-link>
       </div>
+      <div class="link">
+        <router-link :to="{ name: 'reviews' }">Reviews</router-link>
+      </div>
       <div class="cart-container">
         <Cart class="cart">
           <button slot="button" class="cart-btn" @click="showCart">

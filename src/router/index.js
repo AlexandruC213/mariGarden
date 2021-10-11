@@ -30,6 +30,13 @@ const routes = [
         .then((product) => {
           routeTo.params.product = product;
           next();
+        })
+        .catch((error) => {
+          if (error.response && error.response.status == 404) {
+            next({ name: "404", params: { resource: "product" } });
+          } else {
+            next({ name: "networkIssue" });
+          }
         });
     },
   },
@@ -37,6 +44,21 @@ const routes = [
     path: "/checkout",
     name: "checkout",
     component: () => import("../views/Checkout.vue"),
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: () => import("../views/errors/NotFound.vue"),
+    props: true,
+  },
+  {
+    path: "/network-issue",
+    name: "networkIssue",
+    component: () => import("../views/errors/NetworkIssue.vue"),
+  },
+  {
+    path: "*",
+    redirect: { name: "404", params: { resource: "page" } },
   },
 ];
 

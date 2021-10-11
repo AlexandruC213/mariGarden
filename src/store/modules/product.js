@@ -36,27 +36,17 @@ export const actions = {
         dispatch("notification/addNotification", notification, { root: true });
       });
   },
-  getProduct({ commit, getters, dispatch }, id) {
+  getProduct({ commit, getters }, id) {
     let product = getters.getProductById(id);
 
     if (product) {
       commit("SET_PRODUCT_DETAILS", product);
       return product;
     } else {
-      return EventServices.fetchProductDetails(id)
-        .then((response) => {
-          commit("SET_PRODUCT_DETAILS", response.data);
-          return response.data;
-        })
-        .catch((error) => {
-          const notification = {
-            type: "error",
-            message: "There was a problem fetching product: " + error.message,
-          };
-          dispatch("notification/addNotification", notification, {
-            root: true,
-          });
-        });
+      return EventServices.fetchProductDetails(id).then((response) => {
+        commit("SET_PRODUCT_DETAILS", response.data);
+        return response.data;
+      });
     }
   },
 };

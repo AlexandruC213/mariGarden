@@ -57,4 +57,18 @@ export default {
   width: 100%;
   height: 150px;
 }
+
+.notFound-container {
+  width: 100%;
+  height: 12vh;
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.notFound-container a {
+  text-decoration: none;
+  color: var(--green);
+}
 </style>

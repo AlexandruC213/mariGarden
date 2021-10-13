@@ -1,45 +1,73 @@
 <template>
-  <div class="productDetails-container">
-    <div
-      class="image-container"
-      :style="{ backgroundImage: `url(${product.image})` }"
-    >
-      <div class="details-container">
-        <div class="title-price">
-          <p>{{ product.title }}</p>
-          <p>{{ product.price }}</p>
-        </div>
-        <div class="description">
-          <p>{{ product.longDesc }}</p>
-        </div>
-        <div class="rating-btnBuy">
-          <p>Rating: 5/5</p>
-          <button @click="addProd">
-            <i class="fas fa-shopping-cart"></i> Buy
-          </button>
+  <div class="page-container">
+    <div class="productDetails-container">
+      <div
+        class="image-container"
+        :style="{ backgroundImage: `url(${product.image})` }"
+      >
+        <div class="details-container">
+          <div class="title-price">
+            <p>{{ product.title }}</p>
+            <p>{{ product.price }}</p>
+          </div>
+          <div class="description">
+            <p>{{ product.longDesc }}</p>
+          </div>
+          <div class="rating-btnBuy">
+            <p>Rating: 5/5</p>
+            <button @click="addProd">
+              <i class="fas fa-shopping-cart"></i> Buy
+            </button>
+          </div>
         </div>
       </div>
+    </div>
+    <div class="reviews-container">
+      <DisplayReviews :reviews="productReviews" class="reviews" />
     </div>
   </div>
 </template>
 
 <script>
+import DisplayReviews from "@/components/DisplayReviews.vue";
+import { mapState } from "vuex";
+
 export default {
   props: {
     id: [Number, String],
     product: Object,
+  },
+  components: {
+    DisplayReviews,
   },
   methods: {
     addProd() {
       this.$store.dispatch("cart/addProduct", this.product);
     },
   },
+  computed: mapState("product", ["productReviews"]),
 };
 </script>
 
 <style scoped>
-.productDetails-container {
+.page-container {
   width: 100%;
+  margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-container .reviews-container {
+  width: 90%;
+  margin: 50px 0;
+}
+
+.page-container .productDetails-container {
+  width: 100%;
+
+  border-radius: 7px;
 
   display: flex;
   flex-direction: column;
@@ -49,7 +77,7 @@ export default {
 
 .productDetails-container .image-container {
   width: 90%;
-  height: 65vh;
+  height: 80vh;
   border-radius: 7px;
   background-repeat: no-repeat;
   background-position: center;

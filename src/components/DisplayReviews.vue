@@ -16,15 +16,9 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
-  computed: {
-    ...mapState("review", ["reviews"]),
-  },
-  created() {
-    this.$store.dispatch("review/getReviews");
-    console.log(this.reviews);
+  props: {
+    reviews: Array,
   },
 };
 </script>

@@ -4,7 +4,6 @@ export const namespaced = true;
 
 export const state = {
   reviews: [],
-  //   review: {},
 };
 
 export const mutations = {
@@ -17,15 +16,17 @@ export const mutations = {
 };
 
 export const actions = {
-  getReviews({ commit }) {
-    console.log("Intra in getReviews");
+  getReviews({ commit, dispatch }) {
     EventServices.fetchReviews()
       .then((response) => {
-        console.log(response);
         commit("SET_REVIEWS", response.data);
       })
       .catch((error) => {
-        console.log(error.message);
+        const notification = {
+          type: "error",
+          message: "There was a problem fetching reviews: " + error.message,
+        };
+        dispatch("notification/addNotification", notification, { root: true });
       });
   },
   addReview({ commit, dispatch }, review) {

@@ -6,6 +6,7 @@ export const state = {
   products: [],
   allProducts: [],
   product: {},
+  productReviews: [],
   numberOfProducts: null,
   perPage: 4,
 };
@@ -22,6 +23,9 @@ export const mutations = {
   },
   SET_ALL_PRODUCTS(state, allProducts) {
     state.allProducts = allProducts;
+  },
+  SET_PRODUCT_REVIEWS(state, reviews) {
+    state.productReviews = reviews;
   },
 };
 
@@ -40,15 +44,17 @@ export const actions = {
         dispatch("notification/addNotification", notification, { root: true });
       });
   },
-  getProduct({ commit, getters }, id) {
+  getProduct({ commit, getters, dispatch }, id) {
     let product = getters.getProductById(id);
 
     if (product) {
       commit("SET_PRODUCT_DETAILS", product);
+      dispatch("getProductReviews");
       return product;
     } else {
       return EventServices.fetchProductDetails(id).then((response) => {
         commit("SET_PRODUCT_DETAILS", response.data);
+        dispatch("getProductReviews");
         return response.data;
       });
     }
@@ -59,10 +65,36 @@ export const actions = {
       return response.data;
     });
   },
+  getProductReviews({ commit, getters, dispatch }) {
+    EventServices.fetchReviews()
+      .then((response) => {
+        const reviews = response.data;
+        const filteredReviews = getters.selectProductReviews(reviews);
+        commit("SET_PRODUCT_REVIEWS", filteredReviews);
+      })
+      .catch((error) => {
+        const notification = {
+          type: "error",
+          message:
+            "There was a problem fetching reviews for this product: " +
+            error.message,
+        };
+        dispatch("notification/addNotification", notification, { root: true });
+      });
+  },
 };
 
 export const getters = {
   getProductById: (state) => (id) => {
     return state.products.find((product) => product.id === id);
+  },
+  selectProductReviews: (state) => (reviews) => {
+    let prodReviews = [];
+    reviews.forEach((review) => {
+      if (review.productSelected === state.product.title) {
+        prodReviews.push(review);
+      }
+    });
+    return prodReviews;
   },
 };

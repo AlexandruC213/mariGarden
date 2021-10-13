@@ -10,7 +10,11 @@
       >
     </div>
 
-    <DisplayReviews v-show="displayTab('Reviews')" class="reviewsTab" />
+    <DisplayReviews
+      v-show="displayTab('Reviews')"
+      class="reviewsTab"
+      :reviews="reviews"
+    />
 
     <MakeReview
       v-show="displayTab('Make a Review')"
@@ -23,6 +27,7 @@
 <script>
 import DisplayReviews from "@/components/DisplayReviews.vue";
 import MakeReview from "@/components/MakeReview.vue";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -54,6 +59,12 @@ export default {
       };
     },
   },
+  computed: {
+    ...mapState("review", ["reviews"]),
+  },
+  created() {
+    this.$store.dispatch("review/getReviews");
+  },
 };
 </script>
 
@@ -74,7 +85,6 @@ export default {
   padding: 10px 15px;
 }
 
-.container-reviews .reviewsTab,
 .container-reviews .makeReview {
   width: 100%;
   margin-top: 50px;
@@ -84,8 +94,12 @@ export default {
   align-items: stretch;
 }
 
+.container-reviews .reviewsTab {
+  height: 60vh;
+  overflow-y: auto;
+}
+
 .active {
   color: var(--green);
-  text-decoration: underline;
 }
 </style>

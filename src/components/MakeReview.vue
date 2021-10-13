@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import NProgress from "nprogress";
+
 export default {
   props: {
     allProducts: {
@@ -58,10 +60,16 @@ export default {
       };
     },
     createReview() {
-      this.$store.dispatch("review/addReview", this.review).then(() => {
-        this.$router.go();
-        this.review = this.createFreshReviewObject();
-      });
+      NProgress.start();
+      this.$store
+        .dispatch("review/addReview", this.review)
+        .then(() => {
+          this.$router.go();
+          this.review = this.createFreshReviewObject();
+        })
+        .catch(() => {
+          NProgress.done();
+        });
     },
   },
 };

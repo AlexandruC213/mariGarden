@@ -1,4 +1,5 @@
 import EventServices from "@/services/EventServices.js";
+// import { filter } from "core-js/core/array";
 
 export const namespaced = true;
 
@@ -7,6 +8,7 @@ export const state = {
   allProducts: [],
   product: {},
   productReviews: [],
+  productRating: 0,
   numberOfProducts: null,
   perPage: 4,
 };
@@ -26,6 +28,9 @@ export const mutations = {
   },
   SET_PRODUCT_REVIEWS(state, reviews) {
     state.productReviews = reviews;
+  },
+  SET_PRODUCT_RATING(state, rating) {
+    state.productRating = rating;
   },
 };
 
@@ -70,7 +75,8 @@ export const actions = {
       .then((response) => {
         const reviews = response.data;
         const filteredReviews = getters.selectProductReviews(reviews);
-        commit("SET_PRODUCT_REVIEWS", filteredReviews);
+        commit("SET_PRODUCT_REVIEWS", filteredReviews[0]);
+        commit("SET_PRODUCT_RATING", filteredReviews[1]);
       })
       .catch((error) => {
         const notification = {
@@ -90,11 +96,15 @@ export const getters = {
   },
   selectProductReviews: (state) => (reviews) => {
     let prodReviews = [];
+    let rating = 0;
+
     reviews.forEach((review) => {
       if (review.productSelected === state.product.title) {
         prodReviews.push(review);
+        rating += review.rating;
       }
     });
-    return prodReviews;
+
+    return [prodReviews, (rating / prodReviews.length).toFixed(2)];
   },
 };

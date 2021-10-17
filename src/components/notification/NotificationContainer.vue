@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Notification from "@/components/Notification.vue";
+import Notification from "@/components/notification/Notification.vue";
 import { mapState } from "vuex";
 
 export default {

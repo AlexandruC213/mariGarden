@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
-import NotificationContainer from "@/components/NotificationContainer.vue";
+import Header from "@/components/header&footer/Header.vue";
+import Footer from "@/components/header&footer/Footer.vue";
+import NotificationContainer from "@/components/notification/NotificationContainer.vue";
 
 export default {
   components: {

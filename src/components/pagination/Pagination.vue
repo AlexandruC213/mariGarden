@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import PageLinks from "@/components/PageLinks.vue";
+import PageLinks from "@/components/pagination/PageLinks.vue";
 import { mapState } from "vuex";
 
 export default {

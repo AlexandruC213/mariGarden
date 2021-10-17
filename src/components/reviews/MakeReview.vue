@@ -22,7 +22,7 @@
 
       <div class="rating">
         <label>Select Rating</label>
-        <select v-model="review.rating">
+        <select v-model.number="review.rating">
           <option v-for="index in 5" :key="index">{{ index }}</option>
         </select>
       </div>
@@ -56,7 +56,7 @@ export default {
         productSelected: "",
         title: "",
         description: "",
-        rating: "",
+        rating: 0,
       };
     },
     createReview() {

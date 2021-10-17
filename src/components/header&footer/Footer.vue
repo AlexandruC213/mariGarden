@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import SocialIcon from "@/components/SocialIcon.vue";
+import SocialIcon from "@/components/header&footer/SocialIcon.vue";
 
 export default {
   components: {

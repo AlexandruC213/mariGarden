@@ -14,7 +14,10 @@
             <p>{{ product.longDesc }}</p>
           </div>
           <div class="rating-btnBuy">
-            <p>Rating: 5/5</p>
+            <p v-if="productReviews.length > 0">
+              Rating: {{ productRating }}/5
+            </p>
+            <p v-else>This product has no rating yet</p>
             <button @click="addProd">
               <i class="fas fa-shopping-cart"></i> Buy
             </button>
@@ -29,7 +32,7 @@
 </template>
 
 <script>
-import DisplayReviews from "@/components/DisplayReviews.vue";
+import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -45,7 +48,9 @@ export default {
       this.$store.dispatch("cart/addProduct", this.product);
     },
   },
-  computed: mapState("product", ["productReviews"]),
+  computed: {
+    ...mapState("product", ["productReviews", "productRating"]),
+  },
 };
 </script>
 

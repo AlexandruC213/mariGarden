@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import ProductItem from "@/components/ProductItem.vue";
-import Pagination from "@/components/Pagination.vue";
+import ProductItem from "@/components/products/ProductItem.vue";
+import Pagination from "@/components/pagination/Pagination.vue";
 import { mapState } from "vuex";
 
 export default {

@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import DisplayReviews from "@/components/DisplayReviews.vue";
-import MakeReview from "@/components/MakeReview.vue";
+import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
+import MakeReview from "@/components/reviews/MakeReview.vue";
 import { mapState } from "vuex";
 
 export default {

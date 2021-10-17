@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import CartIcons from "@/components/CartIcons.vue";
+import CartIcons from "@/components/cart/CartIcons.vue";
 import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import ProductList from "@/components/ProductList.vue";
+import ProductList from "@/components/products/ProductList.vue";
 import store from "@/store/index";
 
 function getPageProducts(routeTo, next) {

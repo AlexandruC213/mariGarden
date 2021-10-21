@@ -4,8 +4,8 @@
       <div class="select">
         <label>Select a Product</label>
         <select v-model="review.productSelected">
-          <option v-for="prod in allProducts" :key="prod.id">
-            {{ prod.title }}
+          <option v-for="product in products" :key="product.id">
+            {{ product.title }}
           </option>
         </select>
       </div>
@@ -34,25 +34,22 @@
 
 <script>
 import NProgress from "nprogress";
+import { mapState } from "vuex";
 
 export default {
-  props: {
-    allProducts: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
       review: this.createFreshReviewObject(),
     };
   },
+  computed: {
+    ...mapState({
+      products: (state) => state.product.products,
+    }),
+  },
   methods: {
     createFreshReviewObject() {
-      const id = Math.floor(Math.random() * 10000000);
-
       return {
-        id: id,
         productSelected: "",
         title: "",
         description: "",

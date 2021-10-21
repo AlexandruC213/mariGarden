@@ -17,7 +17,7 @@ export const mutations = {
 
 export const actions = {
   getReviews({ commit, dispatch }) {
-    EventServices.fetchReviews()
+    return EventServices.fetchReviews()
       .then((response) => {
         commit("SET_REVIEWS", response.data);
       })
@@ -50,4 +50,10 @@ export const actions = {
   },
 };
 
-export const getters = {};
+export const getters = {
+  selectProductReviews: (state) => (productName) => {
+    return state.reviews.filter(
+      (review) => review.productSelected === productName
+    );
+  },
+};

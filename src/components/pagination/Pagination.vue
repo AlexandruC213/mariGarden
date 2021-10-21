@@ -1,7 +1,7 @@
 <template>
   <div class="pagination-container">
     <router-link
-      :to="{ name: checkPage, query: { page: this.page - 1 } }"
+      :to="{ name: checkPage, query: { page: this.currentPage - 1 } }"
       rel="prev"
       tag="button"
       :disabled="disabledPrev"
@@ -18,7 +18,7 @@
     >
 
     <router-link
-      :to="{ name: checkPage, query: { page: this.page + 1 } }"
+      :to="{ name: checkPage, query: { page: this.currentPage + 1 } }"
       rel="next"
       tag="button"
       :disabled="disabledNext"
@@ -34,15 +34,15 @@ import { mapState } from "vuex";
 
 export default {
   props: {
-    page: Number,
     productsPage: String,
+    perPage: Number,
   },
   components: {
     PageLinks,
   },
   computed: {
     disabledPrev() {
-      return this.page == 1;
+      return this.currentPage == 1;
     },
     disabledNext() {
       return !this.lastPage;
@@ -51,14 +51,14 @@ export default {
       return this.productsPage === "products" ? this.productsPage : "home";
     },
     numberOfPages() {
-      return Math.ceil(this.numberProduct / this.perPage);
+      return Math.ceil(this.numberOfProducts / this.perPage);
     },
     lastPage() {
-      return this.numberProduct > this.page * this.perPage;
+      return this.numberOfProducts > this.currentPage * this.perPage;
     },
     ...mapState({
-      numberProduct: (state) => state.product.numberOfProducts,
-      perPage: (state) => state.product.perPage,
+      numberOfProducts: (state) => state.product.products.length,
+      currentPage: (state) => state.product.lastLoadedPage,
     }),
   },
 };

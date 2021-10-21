@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="product-list-container">
-      <ProductList :page="page" />
+      <ProductList />
     </div>
   </div>
 </template>
@@ -20,33 +20,25 @@
 import ProductList from "@/components/products/ProductList.vue";
 import store from "@/store/index";
 
-function getPageProducts(routeTo, next) {
+function getPageProductsAndReviews(routeTo, next) {
   const currentPage = parseInt(routeTo.query.page) || 1;
-  store
-    .dispatch("product/getProducts", {
-      page: currentPage,
-    })
-    .then(() => {
-      routeTo.params.page = currentPage;
-      next();
-    });
+  store.dispatch("product/getProducts").then(() => {
+    routeTo.params.page = currentPage;
+    store.dispatch("product/setPage", currentPage);
+    next();
+  });
+  store.dispatch("review/getReviews");
 }
 
 export default {
   components: {
     ProductList,
   },
-  props: {
-    page: {
-      type: Number,
-      required: true,
-    },
-  },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    getPageProducts(routeTo, next);
+    getPageProductsAndReviews(routeTo, next);
   },
   beforeRouteUpdate(routeTo, routeFrom, next) {
-    getPageProducts(routeTo, next);
+    getPageProductsAndReviews(routeTo, next);
   },
 };
 </script>

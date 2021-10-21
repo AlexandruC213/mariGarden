@@ -14,9 +14,7 @@
             <p>{{ product.longDesc }}</p>
           </div>
           <div class="rating-btnBuy">
-            <p v-if="productReviews.length > 0">
-              Rating: {{ productRating }}/5
-            </p>
+            <p v-if="productReviewsLength">Rating: {{ productRating }}/5</p>
             <p v-else>This product has no rating yet</p>
             <button @click="addProd">
               <i class="fas fa-shopping-cart"></i> Buy
@@ -25,31 +23,88 @@
         </div>
       </div>
     </div>
-    <div class="reviews-container">
-      <DisplayReviews :reviews="productReviews" class="reviews" />
+    <div class="reviews-container" ref="reviews" v-if="productReviewsLength">
+      <DisplayReviews :reviews="tempReviews" />
+    </div>
+    <div v-else class="no-reviews">
+      <p>This Product Has no reviews yet!</p>
     </div>
   </div>
 </template>
 
 <script>
 import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   props: {
-    id: [Number, String],
-    product: Object,
+    id: {
+      type: [String, Number],
+      required: true,
+    },
   },
   components: {
     DisplayReviews,
   },
+  data() {
+    return {
+      tempReviews: [],
+      reviewsPerScroll: 2,
+      scrollTimes: 1,
+    };
+  },
   methods: {
     addProd() {
-      this.$store.dispatch("cart/addProduct", this.product);
+      this.addProduct(this.product);
     },
+    loadMoreReviews() {
+      const limit = this.product.reviews.length / 2;
+      setTimeout(() => {
+        if (this.scrollTimes <= limit) {
+          this.tempReviews = this.product.reviews.slice(
+            0,
+            this.reviewsPerScroll * this.scrollTimes
+          );
+          this.scrollTimes++;
+        }
+      }, 500);
+    },
+
+    ...mapActions({
+      addProduct: "cart/addProduct",
+      getProduct: "product/getProduct",
+    }),
   },
   computed: {
-    ...mapState("product", ["productReviews", "productRating"]),
+    productRating() {
+      let rating = null;
+      for (const review of this.product.reviews) {
+        rating += review.rating;
+      }
+      return (rating / this.product.reviews.length).toFixed(2);
+    },
+    productReviewsLength() {
+      return this.product.reviews.length > 0;
+    },
+    ...mapState({
+      product: (state) => state.product.currentProduct,
+      lastPage: (state) => state.product.lastLoadedPage,
+    }),
+  },
+  created() {
+    this.getProduct(this.id);
+  },
+  mounted() {
+    const reviewsList = this.$refs.reviews;
+    reviewsList.addEventListener("scroll", () => {
+      if (
+        reviewsList.scrollTop + reviewsList.clientHeight >=
+        reviewsList.scrollHeight
+      ) {
+        this.loadMoreReviews();
+      }
+    });
+    this.loadMoreReviews();
   },
 };
 </script>
@@ -66,7 +121,15 @@ export default {
 
 .page-container .reviews-container {
   width: 90%;
-  margin: 50px 0;
+  height: 30vh;
+  overflow: auto;
+  margin: 50px 0 75px 0;
+}
+
+.page-container .no-reviews {
+  padding: 20px;
+  border: 1px solid black;
+  margin: 25px 0 75px 0;
 }
 
 .page-container .productDetails-container {

@@ -3,12 +3,16 @@
     <h1>Products</h1>
     <div class="products-container">
       <ProductItem
-        v-for="product in products"
+        v-for="product in currentProductsOnPage"
         :key="product.id"
         :product="product"
       />
     </div>
-    <Pagination :productsPage="productsPage" :page="page" class="pagination" />
+    <Pagination
+      :productsPage="productsPage"
+      :perPage="perPage"
+      class="pagination"
+    />
   </div>
 </template>
 
@@ -19,21 +23,28 @@ import { mapState } from "vuex";
 
 export default {
   props: {
-    page: {
-      type: Number,
-      required: true,
-    },
     productsPage: String,
+  },
+  data() {
+    return {
+      currentProductsOnPage: [],
+      perPage: 4,
+    };
   },
   components: {
     ProductItem,
     Pagination,
   },
-
   computed: {
     ...mapState({
       products: (state) => state.product.products,
+      currentPage: (state) => state.product.lastLoadedPage,
     }),
+  },
+  created() {
+    const start = this.perPage * (this.currentPage - 1);
+    const end = this.perPage * this.currentPage;
+    this.currentProductsOnPage = this.products.slice(start, end);
   },
 };
 </script>

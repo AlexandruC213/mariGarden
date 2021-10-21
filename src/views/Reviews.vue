@@ -16,29 +16,19 @@
       :reviews="reviews"
     />
 
-    <MakeReview
-      v-show="displayTab('Make a Review')"
-      class="makeReview"
-      :allProducts="allProducts"
-    />
+    <MakeReview v-show="displayTab('Make a Review')" class="makeReview" />
   </div>
 </template>
 
 <script>
 import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
 import MakeReview from "@/components/reviews/MakeReview.vue";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
     DisplayReviews,
     MakeReview,
-  },
-  props: {
-    allProducts: {
-      type: Array,
-      required: true,
-    },
   },
   data() {
     return {
@@ -58,12 +48,20 @@ export default {
         active: this.selectedTab == currentTab,
       };
     },
+    ...mapActions({
+      getReviews: "review/getReviews",
+      getProducts: "product/getProducts",
+    }),
   },
   computed: {
-    ...mapState("review", ["reviews"]),
+    ...mapState({
+      reviews: (state) => state.review.reviews,
+      products: (state) => state.product.products,
+    }),
   },
   created() {
-    this.$store.dispatch("review/getReviews");
+    this.getReviews();
+    this.getProducts();
   },
 };
 </script>

@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import NProgress from "nprogress";
-import store from "@/store/index";
 
 Vue.use(VueRouter);
 
@@ -11,34 +10,17 @@ const routes = [
     path: "/",
     name: "home",
     component: Home,
-    props: true,
   },
   {
     path: "/products",
     name: "products",
     component: () => import("../views/Products.vue"),
-    props: true,
   },
   {
     path: "/details/:id",
     name: "details",
     component: () => import("../views/ProductDetails.vue"),
     props: true,
-    beforeEnter(routeTo, routeFrom, next) {
-      store
-        .dispatch("product/getProduct", routeTo.params.id)
-        .then((product) => {
-          routeTo.params.product = product;
-          next();
-        })
-        .catch((error) => {
-          if (error.response && error.response.status == 404) {
-            next({ name: "404", params: { resource: "product" } });
-          } else {
-            next({ name: "networkIssue" });
-          }
-        });
-    },
   },
   {
     path: "/checkout",
@@ -49,13 +31,6 @@ const routes = [
     path: "/reviews",
     name: "reviews",
     component: () => import("../views/Reviews.vue"),
-    props: true,
-    beforeEnter(routeTo, routeFrom, next) {
-      store.dispatch("product/getAllProducts").then((allProducts) => {
-        routeTo.params.allProducts = allProducts;
-        next();
-      });
-    },
   },
   {
     path: "/404",
@@ -76,6 +51,9 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
   routes,
 });
 

@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   props: {
@@ -38,8 +38,11 @@ export default {
   },
   methods: {
     addProd() {
-      this.$store.dispatch("cart/addProduct", this.product);
+      this.addProduct(this.product);
     },
+    ...mapActions({
+      addProduct: "cart/addProduct",
+    }),
   },
   computed: mapState(["cart"]),
 };

@@ -27,7 +27,6 @@ function getPageProductsAndReviews(routeTo, next) {
     store.dispatch("product/setPage", currentPage);
     next();
   });
-  store.dispatch("review/getReviews");
 }
 
 export default {

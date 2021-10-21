@@ -4,7 +4,9 @@ export const namespaced = true;
 
 export const state = {
   products: [],
-  currentProduct: {},
+  currentProduct: {
+    reviews: [],
+  },
   lastLoadedPage: null,
 };
 
@@ -13,7 +15,7 @@ export const mutations = {
     state.products = products;
   },
   SET_PRODUCT(state, product) {
-    state.currentProduct = product;
+    state.currentProduct = { ...product, reviews: [] };
   },
   SET_LAST_PAGE(state, page) {
     state.lastLoadedPage = page;
@@ -36,21 +38,31 @@ export const actions = {
 
   getProduct({ commit, getters, dispatch }, id) {
     const product = getters.selectProductById(id);
-
     if (product) {
       commit("SET_PRODUCT", product);
       dispatch("getProductReviews", product.title);
     } else {
-      EventServices.fetchProduct(id).then((response) => {
-        commit("SET_PRODUCT", response.data);
-        dispatch("getProductReviews", response.data.title);
-      });
+      EventServices.fetchProduct(id)
+        .then((response) => {
+          commit("SET_PRODUCT", response.data);
+          dispatch("getProductReviews", response.data.title);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
     }
   },
 
-  getProductReviews({ commit, rootGetters }, title) {
-    const productReviews = rootGetters["review/selectProductReviews"](title);
-    commit("SET_PRODUCT_REVIEWS", productReviews);
+  getProductReviews({ commit, rootGetters, dispatch }, title) {
+    dispatch("review/getReviews", null, { root: true })
+      .then(() => {
+        const productReviews =
+          rootGetters["review/selectProductReviews"](title);
+        commit("SET_PRODUCT_REVIEWS", productReviews);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   },
 
   setPage({ commit }, page) {

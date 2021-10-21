@@ -140,6 +140,13 @@
       "description": "Test",
       "rating": 2,
       "id": 7
+    },
+    {
+      "productSelected": "Rose",
+      "title": "Ultimul",
+      "description": "Test",
+      "rating": 5,
+      "id": 8
     }
   ]
 }

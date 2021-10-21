@@ -23,12 +23,13 @@
         </div>
       </div>
     </div>
-    <div class="reviews-container" ref="reviews" v-if="productReviewsLength">
-      <DisplayReviews :reviews="tempReviews" />
+    <div class="reviews-container" ref="reviews">
+      <!-- @scroll="loadMoreReviews" -->
+      <DisplayReviews :reviews="product.reviews" />
     </div>
-    <div v-else class="no-reviews">
+    <!-- <div v-else class="no-reviews">
       <p>This Product Has no reviews yet!</p>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -57,19 +58,25 @@ export default {
     addProd() {
       this.addProduct(this.product);
     },
-    loadMoreReviews() {
-      const limit = this.product.reviews.length / 2;
-      setTimeout(() => {
-        if (this.scrollTimes <= limit) {
-          this.tempReviews = this.product.reviews.slice(
-            0,
-            this.reviewsPerScroll * this.scrollTimes
-          );
-          this.scrollTimes++;
-        }
-      }, 500);
-    },
-
+    // loadMoreReviews() {
+    //   const reviewsList = this.$refs.reviews;
+    //   console.log(this.reviewsList);
+    //   if (
+    //     reviewsList.scrollTop + reviewsList.clientHeight >=
+    //     reviewsList.scrollHeight
+    //   ) {
+    //     const limit = this.product.reviews.length / 2;
+    //     setTimeout(() => {
+    //       if (this.scrollTimes <= limit) {
+    //         this.tempReviews = this.product.reviews.slice(
+    //           0,
+    //           this.reviewsPerScroll * this.scrollTimes
+    //         );
+    //         this.scrollTimes++;
+    //       }
+    //     }, 500);
+    //   }
+    // },
     ...mapActions({
       addProduct: "cart/addProduct",
       getProduct: "product/getProduct",
@@ -88,23 +95,13 @@ export default {
     },
     ...mapState({
       product: (state) => state.product.currentProduct,
-      lastPage: (state) => state.product.lastLoadedPage,
     }),
   },
   created() {
     this.getProduct(this.id);
   },
   mounted() {
-    const reviewsList = this.$refs.reviews;
-    reviewsList.addEventListener("scroll", () => {
-      if (
-        reviewsList.scrollTop + reviewsList.clientHeight >=
-        reviewsList.scrollHeight
-      ) {
-        this.loadMoreReviews();
-      }
-    });
-    this.loadMoreReviews();
+    // this.loadMoreReviews();
   },
 };
 </script>

@@ -16,18 +16,25 @@ export const mutations = {
 };
 
 export const actions = {
-  getReviews({ commit, dispatch }) {
-    return EventServices.fetchReviews()
-      .then((response) => {
-        commit("SET_REVIEWS", response.data);
-      })
-      .catch((error) => {
-        const notification = {
-          type: "error",
-          message: "There was a problem fetching reviews: " + error.message,
-        };
-        dispatch("notification/addNotification", notification, { root: true });
-      });
+  getReviews({ commit, dispatch, state }) {
+    if (state.reviews.length == 0) {
+      return EventServices.fetchReviews()
+        .then((response) => {
+          commit("SET_REVIEWS", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          const notification = {
+            type: "error",
+            message: "There was a problem fetching reviews: " + error.message,
+          };
+          dispatch("notification/addNotification", notification, {
+            root: true,
+          });
+        });
+    } else {
+      return state.reviews;
+    }
   },
   addReview({ commit, dispatch }, review) {
     return EventServices.postReview(review)

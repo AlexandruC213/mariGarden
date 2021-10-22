@@ -20,6 +20,9 @@ export default {
   fetchReviews() {
     return apiClient.get("/reviews");
   },
+  fetchProductReviews(productName) {
+    return apiClient.get("/reviews?productSelected=" + productName);
+  },
   postReview(review) {
     return apiClient.post("/reviews/", review);
   },

@@ -40,12 +40,14 @@ export const actions = {
     const product = getters.selectProductById(id);
     if (product) {
       commit("SET_PRODUCT", product);
-      dispatch("getProductReviews", product.title);
+      dispatch("setProductReviews");
+      // dispatch("getProductReviews", product.title);
     } else {
       EventServices.fetchProduct(id)
         .then((response) => {
           commit("SET_PRODUCT", response.data);
-          dispatch("getProductReviews", response.data.title);
+          dispatch("setProductReviews");
+          // dispatch("getProductReviews", response.data.title);
         })
         .catch((error) => {
           console.log(error.message);
@@ -53,20 +55,30 @@ export const actions = {
     }
   },
 
-  getProductReviews({ commit, rootGetters, dispatch }, title) {
-    dispatch("review/getReviews", null, { root: true })
-      .then(() => {
-        const productReviews =
-          rootGetters["review/selectProductReviews"](title);
-        commit("SET_PRODUCT_REVIEWS", productReviews);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  },
+  // getProductReviews({ commit, rootGetters, dispatch }, title) {
+  //   dispatch("review/getReviews", null, { root: true })
+  //     .then(() => {
+  //       const productReviews =
+  //         rootGetters["review/selectProductReviews"](title);
+  //       commit("SET_PRODUCT_REVIEWS", productReviews);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.message);
+  //     });
+  // },
 
   setPage({ commit }, page) {
     commit("SET_LAST_PAGE", page);
+  },
+
+  setProductReviews({ commit, state }) {
+    EventServices.fetchProductReviews(state.currentProduct.title).then(
+      (response) => {
+        console.log(response.data);
+        commit("SET_PRODUCT_REVIEWS", response.data);
+        console.log(state.currentProduct);
+      }
+    );
   },
 };
 

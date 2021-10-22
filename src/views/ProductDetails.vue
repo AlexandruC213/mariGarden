@@ -23,9 +23,9 @@
         </div>
       </div>
     </div>
-    <div class="reviews-container" ref="reviews">
+    <div class="reviews-container" ref="reviews" @scroll="loadMoreReviews">
       <!-- @scroll="loadMoreReviews" -->
-      <DisplayReviews :reviews="product.reviews" />
+      <DisplayReviews :reviews="tempReviews" />
     </div>
     <!-- <div v-else class="no-reviews">
       <p>This Product Has no reviews yet!</p>
@@ -58,25 +58,24 @@ export default {
     addProd() {
       this.addProduct(this.product);
     },
-    // loadMoreReviews() {
-    //   const reviewsList = this.$refs.reviews;
-    //   console.log(this.reviewsList);
-    //   if (
-    //     reviewsList.scrollTop + reviewsList.clientHeight >=
-    //     reviewsList.scrollHeight
-    //   ) {
-    //     const limit = this.product.reviews.length / 2;
-    //     setTimeout(() => {
-    //       if (this.scrollTimes <= limit) {
-    //         this.tempReviews = this.product.reviews.slice(
-    //           0,
-    //           this.reviewsPerScroll * this.scrollTimes
-    //         );
-    //         this.scrollTimes++;
-    //       }
-    //     }, 500);
-    //   }
-    // },
+    loadMoreReviews() {
+      const reviewsList = this.$refs.reviews;
+      if (
+        reviewsList.scrollTop + reviewsList.clientHeight >=
+        reviewsList.scrollHeight
+      ) {
+        const limit = Math.ceil(this.product.reviews.length / 2);
+        setTimeout(() => {
+          if (this.scrollTimes <= limit) {
+            this.tempReviews = this.product.reviews.slice(
+              0,
+              this.reviewsPerScroll * this.scrollTimes
+            );
+            this.scrollTimes++;
+          }
+        }, 500);
+      }
+    },
     ...mapActions({
       addProduct: "cart/addProduct",
       getProduct: "product/getProduct",
@@ -101,7 +100,7 @@ export default {
     this.getProduct(this.id);
   },
   mounted() {
-    // this.loadMoreReviews();
+    this.loadMoreReviews();
   },
 };
 </script>

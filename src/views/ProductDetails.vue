@@ -14,7 +14,7 @@
             <p>{{ product.longDesc }}</p>
           </div>
           <div class="rating-btnBuy">
-            <p v-if="productReviewsLength">Rating: {{ productRating }}/5</p>
+            <p v-if="productReviewsLength">Rating: {{productRating}}/5</p>
             <p v-else>This product has no rating yet</p>
             <button @click="addProd">
               <i class="fas fa-shopping-cart"></i> Buy
@@ -23,19 +23,19 @@
         </div>
       </div>
     </div>
-    <div class="reviews-container" ref="reviews" @scroll="loadMoreReviews">
-      <!-- @scroll="loadMoreReviews" -->
-      <DisplayReviews :reviews="tempReviews" />
+    <div class="reviews-container" ref="reviews" @scroll="loadMoreReviews" v-if="productReviewsLength">
+      <DisplayReviews :reviews="tempReviews" :reviewsProduct="true"/>
     </div>
-    <!-- <div v-else class="no-reviews">
-      <p>This Product Has no reviews yet!</p>
-    </div> -->
+    <div v-else class="no-reviews">
+      <p>This product Has no reviews yet!</p>
+    </div>
   </div>
 </template>
 
 <script>
 import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
 import { mapState, mapActions } from "vuex";
+import store from '@/store/index';
 
 export default {
   props: {
@@ -43,6 +43,11 @@ export default {
       type: [String, Number],
       required: true,
     },
+  },
+  beforeRouteEnter(routeTo, routeFrom, next) {
+    store.dispatch('product/setProductReviews').then(() => {
+      next();
+    })
   },
   components: {
     DisplayReviews,
@@ -60,25 +65,27 @@ export default {
     },
     loadMoreReviews() {
       const reviewsList = this.$refs.reviews;
-      if (
-        reviewsList.scrollTop + reviewsList.clientHeight >=
-        reviewsList.scrollHeight
-      ) {
-        const limit = Math.ceil(this.product.reviews.length / 2);
-        setTimeout(() => {
-          if (this.scrollTimes <= limit) {
-            this.tempReviews = this.product.reviews.slice(
-              0,
-              this.reviewsPerScroll * this.scrollTimes
-            );
-            this.scrollTimes++;
-          }
-        }, 500);
+      if (reviewsList) {
+        if (
+          reviewsList.scrollTop + reviewsList.clientHeight >=
+          reviewsList.scrollHeight
+        ) {
+          const limit = Math.ceil(this.product.reviews.length / 2);
+          setTimeout(() => {
+            if (this.scrollTimes <= limit) {
+              const coppyReviews = [...this.product.reviews];
+              this.tempReviews = coppyReviews.reverse().slice(
+                0,
+                this.reviewsPerScroll * this.scrollTimes
+              );
+              this.scrollTimes++;
+            }
+          }, 500);
+        }
       }
     },
     ...mapActions({
       addProduct: "cart/addProduct",
-      getProduct: "product/getProduct",
     }),
   },
   computed: {
@@ -95,9 +102,6 @@ export default {
     ...mapState({
       product: (state) => state.product.currentProduct,
     }),
-  },
-  created() {
-    this.getProduct(this.id);
   },
   mounted() {
     this.loadMoreReviews();

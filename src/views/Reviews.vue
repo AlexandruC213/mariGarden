@@ -41,7 +41,7 @@ export default {
       this.selectedTab = currentTab;
     },
     displayTab(tab) {
-      return this.selectedTab === tab;
+      return this.selectedTab == tab;
     },
     currentActiveTab(currentTab) {
       return {

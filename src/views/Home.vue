@@ -20,7 +20,7 @@
 import ProductList from "@/components/products/ProductList.vue";
 import store from "@/store/index";
 
-function getPageProductsAndReviews(routeTo, next) {
+function getPageProducts(routeTo, next) {
   const currentPage = parseInt(routeTo.query.page) || 1;
   store.dispatch("product/getProducts").then(() => {
     routeTo.params.page = currentPage;
@@ -34,10 +34,10 @@ export default {
     ProductList,
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    getPageProductsAndReviews(routeTo, next);
+    getPageProducts(routeTo, next);
   },
   beforeRouteUpdate(routeTo, routeFrom, next) {
-    getPageProductsAndReviews(routeTo, next);
+    getPageProducts(routeTo, next);
   },
 };
 </script>

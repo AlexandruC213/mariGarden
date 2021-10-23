@@ -17,11 +17,10 @@ export const mutations = {
 
 export const actions = {
   getReviews({ commit, dispatch, state }) {
-    if (state.reviews.length == 0) {
+    if (!state.reviews.length) {
       return EventServices.fetchReviews()
-        .then((response) => {
+      .then((response) => {
           commit("SET_REVIEWS", response.data);
-          return response.data;
         })
         .catch((error) => {
           const notification = {

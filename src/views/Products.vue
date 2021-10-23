@@ -1,12 +1,11 @@
 <template>
   <div class="products">
-    <ProductList :productsPage="productsPage" :page="lastLoadedPage" />
+    <ProductList :productsPage="productsPage" />
   </div>
 </template>
 
 <script>
 import ProductList from "@/components/products/ProductList.vue";
-import { mapState } from "vuex";
 import store from "@/store/index";
 
 function getPageProducts(routeTo, next) {
@@ -26,11 +25,6 @@ export default {
     return {
       productsPage: "products",
     };
-  },
-  computed: {
-    ...mapState({
-      lastLoadedPage: (state) => state.product.lastLoadedPage,
-    }),
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
     getPageProducts(routeTo, next);

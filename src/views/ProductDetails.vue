@@ -14,7 +14,7 @@
             <p>{{ product.longDesc }}</p>
           </div>
           <div class="rating-btnBuy">
-            <p v-if="productReviewsLength">Rating: {{productRating}}/5</p>
+            <p v-if="productReviewsLength">Rating: {{ productRating }}/5</p>
             <p v-else>This product has no rating yet</p>
             <button @click="addProd">
               <i class="fas fa-shopping-cart"></i> Buy
@@ -23,8 +23,13 @@
         </div>
       </div>
     </div>
-    <div class="reviews-container" ref="reviews" @scroll="loadMoreReviews" v-if="productReviewsLength">
-      <DisplayReviews :reviews="tempReviews" :reviewsProduct="true"/>
+    <div class="reviews-container" ref="reviews" v-if="productReviewsLength">
+      <div class="loading-container" v-show="loading">
+        <div class="loading">
+          <span class="fas fa-spinner fa-spin"></span> Loading
+        </div>
+      </div>
+      <DisplayReviews :reviews="tempReviews" :reviewsProduct="true" />
     </div>
     <div v-else class="no-reviews">
       <p>This product Has no reviews yet!</p>
@@ -35,7 +40,7 @@
 <script>
 import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
 import { mapState, mapActions } from "vuex";
-import store from '@/store/index';
+import store from "@/store/index";
 
 export default {
   props: {
@@ -45,18 +50,19 @@ export default {
     },
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    store.dispatch('product/setProductReviews').then(() => {
+    store.dispatch("product/setProductReviews").then(() => {
       next();
-    })
+    });
   },
   components: {
     DisplayReviews,
   },
   data() {
     return {
+      loading: false,
       tempReviews: [],
       reviewsPerScroll: 2,
-      scrollTimes: 1,
+      scrollTimes: 2,
     };
   },
   methods: {
@@ -64,25 +70,23 @@ export default {
       this.addProduct(this.product);
     },
     loadMoreReviews() {
-      const reviewsList = this.$refs.reviews;
-      if (reviewsList) {
-        if (
-          reviewsList.scrollTop + reviewsList.clientHeight >=
-          reviewsList.scrollHeight
-        ) {
-          const limit = Math.ceil(this.product.reviews.length / 2);
+      const that = this;
+      window.onscroll = function () {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          const limit = Math.ceil(that.product.reviews.length / 2);
+          that.loading = that.scrollTimes <= limit ? true : false;
           setTimeout(() => {
-            if (this.scrollTimes <= limit) {
-              const coppyReviews = [...this.product.reviews];
-              this.tempReviews = coppyReviews.reverse().slice(
-                0,
-                this.reviewsPerScroll * this.scrollTimes
-              );
-              this.scrollTimes++;
+            if (that.scrollTimes <= limit) {
+              const coppyReviews = [...that.product.reviews];
+              that.tempReviews = coppyReviews
+                .reverse()
+                .slice(0, that.reviewsPerScroll * that.scrollTimes);
+              that.scrollTimes++;
+              that.loading = false;
             }
           }, 500);
         }
-      }
+      };
     },
     ...mapActions({
       addProduct: "cart/addProduct",
@@ -97,14 +101,18 @@ export default {
       return (rating / this.product.reviews.length).toFixed(2);
     },
     productReviewsLength() {
-      return this.product.reviews.length > 0;
+      return this.product.reviews.length;
     },
     ...mapState({
       product: (state) => state.product.currentProduct,
     }),
   },
   mounted() {
-    this.loadMoreReviews();
+    if (this.productReviewsLength) {
+      const coppyReviews = [...this.product.reviews];
+      this.tempReviews = coppyReviews.reverse().slice(0, this.reviewsPerScroll);
+      this.loadMoreReviews();
+    }
   },
 };
 </script>
@@ -121,9 +129,30 @@ export default {
 
 .page-container .reviews-container {
   width: 90%;
-  height: 30vh;
-  overflow: auto;
   margin: 50px 0 75px 0;
+  position: relative;
+}
+
+.page-container .reviews-container .loading-container {
+  width: 100%;
+  height: calc(100% - 20px);
+  text-align: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 2;
+}
+
+.page-container .reviews-container .loading-container .loading {
+  color: #fff;
+  background-color: var(--green);
+  padding: 10px 20px;
+  border-radius: 5px;
 }
 
 .page-container .no-reviews {

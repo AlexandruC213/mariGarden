@@ -15,14 +15,12 @@
       </div>
       <div class="cart-container">
         <Cart class="cart">
-          <button slot="button" class="cart-btn" @click="showCart">
-            <span slot="type">
-              <span class="number-products" v-show="numberItems > 0">{{
-                numberItems
-              }}</span>
-              <i class="fas fa-shopping-cart"></i>
-            </span>
-          </button>
+          <BaseButton slot="button" @click="showCart" buttonClass="btn-cart">
+            <span class="number-products" v-show="numberItems > 0">{{
+              numberItems
+            }}</span>
+            <i class="fas fa-shopping-cart"></i
+          ></BaseButton>
           <div slot="content" class="cart-content" v-show="isCardVisible">
             <div
               class="cart-details"
@@ -37,22 +35,25 @@
                 <p class="details-small">{{ product.shortDesc }}</p>
                 <p class="details-small">{{ product.price }}</p>
               </div>
-              <div class="control-buttons">
-                <CartIcons>
-                  <button slot="button" @click="addProduct(product)">
-                    <span slot="sign"><i class="fas fa-plus"></i></span>
-                  </button>
-                </CartIcons>
-                <CartIcons>
-                  <button slot="button" @click="subtractProduct(product)">
-                    <span slot="sign"><i class="fas fa-minus"></i></span>
-                  </button>
-                </CartIcons>
-                <CartIcons>
-                  <button slot="button" @click="deleteProduct(product)">
-                    <span slot="sign"><i class="fas fa-times"></i></span>
-                  </button>
-                </CartIcons>
+              <div class="control-buttons-container">
+                <BaseButton
+                  buttonClass="control-buttons"
+                  @click="addProduct(product)"
+                >
+                  <i class="fas fa-plus"></i>
+                </BaseButton>
+                <BaseButton
+                  buttonClass="control-buttons"
+                  @click="subtractProduct(product)"
+                >
+                  <i class="fas fa-minus"></i>
+                </BaseButton>
+                <BaseButton
+                  buttonClass="control-buttons"
+                  @click="deleteProduct(product)"
+                >
+                  <i class="fas fa-times"></i>
+                </BaseButton>
               </div>
             </div>
             <div class="cart-checkout">
@@ -60,12 +61,10 @@
                 <p>Total: ${{ calculateTotal }}</p>
               </div>
               <router-link :to="{ name: 'checkout' }">
-                <div class="checkout-btn">
-                  <button :disabled="numberItems == 0">
-                    <span><i class="fas fa-shopping-basket"></i></span>
-                    Checkout
-                  </button>
-                </div>
+                <BaseButton :disabled="numberItems == 0">
+                  <span><i class="fas fa-shopping-basket"></i></span>
+                  Checkout</BaseButton
+                >
               </router-link>
             </div>
           </div>
@@ -76,12 +75,12 @@
 </template>
 
 <script>
-import CartIcons from "@/components/cart/CartIcons.vue";
+import Cart from "@/components/cart/Cart.vue";
 import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
-    CartIcons,
+    Cart,
   },
   methods: {
     ...mapActions("cart", [
@@ -155,22 +154,6 @@ export default {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.header-container .links-cart-container .cart-container .cart-btn {
-  padding: 13px;
-  background-color: var(--green);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.header-container .links-cart-container .cart-container .cart-btn:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.header-container .links-cart-container .cart-container .cart-btn span {
-  font-size: 1rem;
-}
-
 .cart {
   position: relative;
 }
@@ -232,7 +215,7 @@ export default {
   align-items: center;
 }
 
-.cart-content .cart-details .control-buttons {
+.cart-content .cart-details .control-buttons-container {
   width: 35%;
 
   display: flex;
@@ -249,53 +232,8 @@ export default {
   background-repeat: no-repeat;
 }
 
-.cart-content .cart-checkout .checkout-btn button {
-  font-size: 1.25rem;
-  padding: 7px 10px;
-  border: none;
-  border-radius: 7px;
-  cursor: pointer;
-  background-color: var(--orange);
-}
-
-.cart-content .cart-checkout .checkout-btn button:hover {
-  background-color: rgba(255, 193, 7, 0.8);
-}
-
-.cart-content .cart-checkout .checkout-btn button:disabled {
-  color: var(--black);
-  background-color: var(--gray);
-}
-
-.cart-content .cart-details .control-buttons button {
-  width: 24px;
-  height: 24px;
-  color: var(--white);
-  font-weight: 500;
-  background-color: var(--gray);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.cart-content .cart-details .control-buttons button:hover {
-  background-color: var(--black);
-}
-
 .cart-content .cart-checkout .total p {
   font-size: 1.25rem;
   font-weight: 600;
-}
-
-.cart .cart-btn .number-products {
-  width: 20px;
-  height: 20px;
-
-  position: absolute;
-  top: 2px;
-  left: 0;
-
-  border-radius: 50%;
-  background-color: var(--orange);
 }
 </style>

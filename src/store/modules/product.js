@@ -19,23 +19,28 @@ export const mutations = {
     state.lastLoadedPage = page;
   },
   SET_PRODUCT_REVIEWS(state, reviews) {
-    state.currentProduct["reviews"] = reviews;
+    state.currentProduct["reviews"] = [...reviews];
   },
 };
 
 export const actions = {
-  getProducts({ commit, dispatch }) {
-    return EventServices.fetchProducts()
-      .then((response) => {
-        commit("SET_PRODUCTS", response.data);
-      })
-      .catch((error) => {
-        const notification = {
-          type: 'error',
-          message: 'There was a problem fetching the products: ' + error.message,
-        }
-        dispatch('notification/addNotification', notification, { root: true });
-      });
+  getProducts({ commit, dispatch, state }) {
+    if (!state.products.length) {
+      return EventServices.fetchProducts()
+        .then((response) => {
+          commit("SET_PRODUCTS", response.data);
+        })
+        .catch((error) => {
+          const notification = {
+            type: "error",
+            message:
+              "There was a problem fetching the products: " + error.message,
+          };
+          dispatch("notification/addNotification", notification, {
+            root: true,
+          });
+        });
+    }
   },
 
   getProduct({ commit, getters, dispatch }, id) {
@@ -49,29 +54,33 @@ export const actions = {
         })
         .catch((error) => {
           const notification = {
-            type: 'error',
-            message: 'There was a problem fetching this product: ' + error.message,
-          }
-          dispatch('notification/addNotification', notification, { root: true });
+            type: "error",
+            message:
+              "There was a problem fetching this product: " + error.message,
+          };
+          dispatch("notification/addNotification", notification, {
+            root: true,
+          });
         });
     }
   },
 
   setProductReviews({ commit, state, dispatch }) {
-    return EventServices.fetchProductReviews(state.currentProduct.title).then(
-      (response) => {
+    return EventServices.fetchProductReviews(state.currentProduct.title)
+      .then((response) => {
         commit("SET_PRODUCT_REVIEWS", response.data);
-      }
-    )
-    .catch(error => {
-      console.log(error.message);
-
-      const notification = {
-        type: 'error',
-        message: 'There was a problem fetching the reviews for this product: ' + error.message,
-      }
-      dispatch('notification/addNotification', notification, { root: true });
-    });
+      })
+      .catch((error) => {
+        const notification = {
+          type: "error",
+          message:
+            "There was a problem fetching the reviews for this product: " +
+            error.message,
+        };
+        dispatch("notification/addNotification", notification, {
+          root: true,
+        });
+      });
   },
 
   setPage({ commit }, page) {

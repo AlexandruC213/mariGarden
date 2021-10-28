@@ -8,13 +8,15 @@
         <div class="details-container">
           <div class="title-price">
             <p>{{ product.title }}</p>
-            <p>{{ product.price }}</p>
+            <p>${{ product.price }}</p>
           </div>
           <div class="description">
             <p>{{ product.longDesc }}</p>
           </div>
           <div class="rating-btnBuy">
-            <p v-if="productReviewsLength">Rating: {{ productRating }}/5</p>
+            <p v-if="productReviewsLength">
+              Rating: {{ productRating | rating }}/5
+            </p>
             <p v-else>This product has no rating yet</p>
             <button @click="addProd">
               <i class="fas fa-shopping-cart"></i> Buy
@@ -50,6 +52,10 @@ export default {
     },
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
+    // if(store.state.product.currentProduct.reviews)
+    // next tick !!!!
+    // const test = { ...store.state.product.currentProduct };
+    // console.log(test.reviews);
     store.dispatch("product/setProductReviews").then(() => {
       next();
     });
@@ -98,7 +104,7 @@ export default {
       for (const review of this.product.reviews) {
         rating += review.rating;
       }
-      return (rating / this.product.reviews.length).toFixed(2);
+      return rating / this.product.reviews.length;
     },
     productReviewsLength() {
       return this.product.reviews.length;

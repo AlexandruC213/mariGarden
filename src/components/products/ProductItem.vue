@@ -16,13 +16,9 @@
         </div>
         <div class="product-buttons">
           <router-link :to="{ name: 'details', params: { id: product.id } }">
-            <button class="btn-details">Details</button>
+            <BaseButton buttonClass="btn-details">Details</BaseButton>
           </router-link>
-          <Cart>
-            <button slot="button" @click="addProd" class="btn-addToCart">
-              <span slot="type">Add to Cart</span>
-            </button>
-          </Cart>
+          <BaseButton @click="addProd">Add to Cart</BaseButton>
         </div>
       </div>
     </div>
@@ -116,35 +112,11 @@ export default {
 }
 
 .product-container .details-container .product-buttons {
+  width: 95%;
   height: 65%;
-
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.product-container .details-container .product-buttons button {
-  font-size: 1.25rem;
-  padding: 7px 10px;
-  border: none;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.product-container .details-container .product-buttons .btn-details {
-  margin-left: 7px;
-}
-
-.product-container .details-container .product-buttons .btn-details:hover {
-  background-color: rgba(0, 0, 0, 0.15);
-}
-
-.product-container .details-container .product-buttons .btn-addToCart {
-  background-color: var(--orange);
-  margin-right: 7px;
-}
-
-.product-container .details-container .product-buttons .btn-addToCart:hover {
-  background-color: rgba(255, 193, 7, 0.8);
 }
 </style>

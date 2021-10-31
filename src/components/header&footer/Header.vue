@@ -21,53 +21,55 @@
             }}</span>
             <i class="fas fa-shopping-cart"></i
           ></BaseButton>
-          <div slot="content" class="cart-content" v-show="isCardVisible">
-            <div
-              class="cart-details"
-              v-for="product in this.cartItems"
-              :key="product.id"
-            >
-              <div class="img-prod">
-                <img :src="product.image" alt="aici imagine" />
+          <transition slot="content" name="fade">
+            <div class="cart-content" v-if="isCardVisible">
+              <div
+                class="cart-details"
+                v-for="product in this.cartItems"
+                :key="product.id"
+              >
+                <div class="img-prod">
+                  <img :src="product.image" alt="aici imagine" />
+                </div>
+                <div class="details-prod">
+                  <p>{{ product.title }} x{{ product.quantity }}</p>
+                  <p class="details-small">{{ product.shortDesc }}</p>
+                  <p class="details-small">${{ product.price | rating }}</p>
+                </div>
+                <div class="control-buttons-container">
+                  <BaseButton
+                    buttonClass="control-buttons"
+                    @click="addProduct(product)"
+                  >
+                    <i class="fas fa-plus"></i>
+                  </BaseButton>
+                  <BaseButton
+                    buttonClass="control-buttons"
+                    @click="subtractProduct(product)"
+                  >
+                    <i class="fas fa-minus"></i>
+                  </BaseButton>
+                  <BaseButton
+                    buttonClass="control-buttons"
+                    @click="deleteProduct(product)"
+                  >
+                    <i class="fas fa-times"></i>
+                  </BaseButton>
+                </div>
               </div>
-              <div class="details-prod">
-                <p>{{ product.title }} x{{ product.quantity }}</p>
-                <p class="details-small">{{ product.shortDesc }}</p>
-                <p class="details-small">{{ product.price }}</p>
-              </div>
-              <div class="control-buttons-container">
-                <BaseButton
-                  buttonClass="control-buttons"
-                  @click="addProduct(product)"
-                >
-                  <i class="fas fa-plus"></i>
-                </BaseButton>
-                <BaseButton
-                  buttonClass="control-buttons"
-                  @click="subtractProduct(product)"
-                >
-                  <i class="fas fa-minus"></i>
-                </BaseButton>
-                <BaseButton
-                  buttonClass="control-buttons"
-                  @click="deleteProduct(product)"
-                >
-                  <i class="fas fa-times"></i>
-                </BaseButton>
+              <div class="cart-checkout">
+                <div class="total">
+                  <p>Total: ${{ calculateTotal }}</p>
+                </div>
+                <router-link :to="{ name: 'checkout' }">
+                  <BaseButton :disabled="numberItems == 0">
+                    <span><i class="fas fa-shopping-basket"></i></span>
+                    Checkout</BaseButton
+                  >
+                </router-link>
               </div>
             </div>
-            <div class="cart-checkout">
-              <div class="total">
-                <p>Total: ${{ calculateTotal }}</p>
-              </div>
-              <router-link :to="{ name: 'checkout' }">
-                <BaseButton :disabled="numberItems == 0">
-                  <span><i class="fas fa-shopping-basket"></i></span>
-                  Checkout</BaseButton
-                >
-              </router-link>
-            </div>
-          </div>
+          </transition>
         </Cart>
       </div>
     </div>
@@ -82,13 +84,16 @@ export default {
   components: {
     Cart,
   },
+  data() {
+    return {
+      isCardVisible: false,
+    };
+  },
   methods: {
-    ...mapActions("cart", [
-      "showCart",
-      "addProduct",
-      "subtractProduct",
-      "deleteProduct",
-    ]),
+    showCart() {
+      this.isCardVisible = !this.isCardVisible;
+    },
+    ...mapActions("cart", ["addProduct", "subtractProduct", "deleteProduct"]),
   },
   computed: {
     numberItems() {
@@ -98,7 +103,6 @@ export default {
     ...mapState({
       cartItems: (state) => state.cart.cartItems,
       total: (state) => state.cart.total,
-      isCardVisible: (state) => state.cart.isCardVisible,
     }),
   },
 };
@@ -164,6 +168,7 @@ export default {
   color: #000;
   overflow-y: auto;
 
+  border: 1px solid black;
   border-radius: 5px;
   background-color: var(--white);
 

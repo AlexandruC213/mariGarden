@@ -19,7 +19,7 @@ export const mutations = {
     state.lastLoadedPage = page;
   },
   SET_PRODUCT_REVIEWS(state, reviews) {
-    state.currentProduct["reviews"] = [...reviews];
+    state.currentProduct.reviews = [...reviews];
   },
 };
 

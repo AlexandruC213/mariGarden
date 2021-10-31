@@ -3,13 +3,9 @@ export const namespaced = true;
 export const state = {
   cartItems: [],
   total: 0,
-  isCardVisible: false,
 };
 
 export const mutations = {
-  SHOW_CART(state) {
-    state.isCardVisible = !state.isCardVisible;
-  },
   ADD_PRODUCT_TO_CART(state, product) {
     state.cartItems.push(product);
   },
@@ -28,9 +24,6 @@ export const mutations = {
 };
 
 export const actions = {
-  showCart({ commit }) {
-    commit("SHOW_CART");
-  },
   addProduct({ commit, getters, dispatch }, product) {
     let prodIndex = getters.findProductIndex(product.id);
 

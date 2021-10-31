@@ -8,7 +8,7 @@
         <div class="details-container">
           <div class="title-price">
             <p>{{ product.title }}</p>
-            <p>${{ product.price }}</p>
+            <p>${{ product.price | rating }}</p>
           </div>
           <div class="description">
             <p>{{ product.longDesc }}</p>
@@ -52,10 +52,6 @@ export default {
     },
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    // if(store.state.product.currentProduct.reviews)
-    // next tick !!!!
-    // const test = { ...store.state.product.currentProduct };
-    // console.log(test.reviews);
     store.dispatch("product/setProductReviews").then(() => {
       next();
     });

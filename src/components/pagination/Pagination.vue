@@ -1,7 +1,7 @@
 <template>
   <div class="pagination-container">
     <router-link
-      :to="{ name: checkPage, query: { page: this.currentPage - 1 } }"
+      :to="{ name: 'home', query: { page: this.currentPage - 1 } }"
       rel="prev"
       tag="button"
       :disabled="disabledPrev"
@@ -9,16 +9,12 @@
       ><i class="fas fa-arrow-left"></i
     ></router-link>
 
-    <PageLinks
-      v-for="page in numberOfPages"
-      :key="page"
-      :page="page"
-      :checkPage="checkPage"
-      >{{ page }}</PageLinks
-    >
+    <PageLinks v-for="page in numberOfPages" :key="page" :page="page">{{
+      page
+    }}</PageLinks>
 
     <router-link
-      :to="{ name: checkPage, query: { page: this.currentPage + 1 } }"
+      :to="{ name: 'home', query: { page: this.currentPage + 1 } }"
       rel="next"
       tag="button"
       :disabled="disabledNext"

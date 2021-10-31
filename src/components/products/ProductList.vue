@@ -8,11 +8,7 @@
         :product="product"
       />
     </div>
-    <Pagination
-      :productsPage="productsPage"
-      :perPage="perPage"
-      class="pagination"
-    />
+    <Pagination :perPage="perPage" class="pagination" />
   </div>
 </template>
 
@@ -22,9 +18,6 @@ import Pagination from "@/components/pagination/Pagination.vue";
 import { mapState } from "vuex";
 
 export default {
-  props: {
-    productsPage: String,
-  },
   data() {
     return {
       currentProductsOnPage: [],

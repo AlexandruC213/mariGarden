@@ -1,7 +1,5 @@
 <template>
-  <router-link
-    :to="{ name: checkPage, query: { page: this.page } }"
-    class="link"
+  <router-link :to="{ name: 'home', query: { page: this.page } }" class="link"
     ><slot></slot
   ></router-link>
 </template>
@@ -10,7 +8,6 @@
 export default {
   props: {
     page: Number,
-    checkPage: String,
   },
 };
 </script>

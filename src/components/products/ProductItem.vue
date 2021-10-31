@@ -7,7 +7,7 @@
       >
         <div class="over-image">
           <p class="title-product">{{ product.title }}</p>
-          <p class="price-product">${{ product.price }}</p>
+          <p class="price-product">${{ product.price | rating }}</p>
         </div>
       </div>
       <div class="details-container">

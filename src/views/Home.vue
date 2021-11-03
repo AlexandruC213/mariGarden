@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="product-list-container">
-      <ProductList />
+      <ProductList :animationType="animationType" />
     </div>
   </div>
 </template>
@@ -30,6 +30,11 @@ function getPageProducts(routeTo, next) {
 }
 
 export default {
+  props: {
+    animationType: {
+      type: String,
+    },
+  },
   components: {
     ProductList,
   },
@@ -37,6 +42,9 @@ export default {
     getPageProducts(routeTo, next);
   },
   beforeRouteUpdate(routeTo, routeFrom, next) {
+    routeTo.query.page > (routeFrom.query.page || 1)
+      ? (routeTo.params.animationType = "100")
+      : (routeTo.params.animationType = "-100");
     getPageProducts(routeTo, next);
   },
 };

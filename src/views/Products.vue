@@ -1,20 +1,24 @@
 <template>
   <div class="products">
-    <h1>Products</h1>
+    <transition name="slide-down" appear>
+      <h1>Products</h1>
+    </transition>
     <div class="container-page">
-      <div class="options-container">
-        <SortProducts
-          :coppyProducts="coppyProducts"
-          @sort-products="setSortedProducts"
-        />
-        <FilterProducts
-          class="filterProducts"
-          filterTitle="price"
-          :coppyProducts="coppyProducts"
-          :filterOptions="filterOptionsPrice"
-          @filter-products="setSortedProducts"
-        />
-      </div>
+      <transition name="slide-left" appear>
+        <div class="options-container">
+          <SortProducts
+            :coppyProducts="coppyProducts"
+            @sort-products="setSortedProducts"
+          />
+          <FilterProducts
+            class="filterProducts"
+            filterTitle="price"
+            :coppyProducts="coppyProducts"
+            :filterOptions="filterOptionsPrice"
+            @filter-products="setSortedProducts"
+          />
+        </div>
+      </transition>
       <div class="products-container">
         <ProductItem
           class="product-item"
@@ -33,6 +37,7 @@ import FilterProducts from "@/components/products/FilterProducts.vue";
 import ProductItem from "@/components/products/ProductItem.vue";
 import { mapState } from "vuex";
 import store from "@/store/index";
+import gsap from "gsap";
 
 export default {
   components: {
@@ -64,9 +69,29 @@ export default {
     setSortedProducts(sortedProducts) {
       this.newProducts = sortedProducts;
     },
+    setAnimation(from) {
+      gsap.from(".product-item", {
+        duration: 0.5,
+        opacity: 0,
+        scale: 1.5,
+        y: 150,
+        x: -150,
+        ease: "power2",
+        stagger: {
+          each: 0.1,
+          from: from,
+        },
+      });
+    },
   },
   created() {
     this.coppyProducts = [...this.products];
+  },
+  mounted() {
+    this.setAnimation("random");
+  },
+  updated() {
+    this.setAnimation("");
   },
 };
 </script>
@@ -107,5 +132,25 @@ export default {
 
 .filterProducts {
   margin-top: 100px;
+}
+
+/*** Animations ***/
+
+.slide-down-enter {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.slide-down-enter-active {
+  transition: all 1s ease;
+}
+
+.slide-left-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.slide-left-enter-active {
+  transition: all 1s ease;
 }
 </style>

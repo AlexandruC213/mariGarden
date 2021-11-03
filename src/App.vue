@@ -83,9 +83,4 @@ export default {
 .fade-leave-active {
   transition: opacity 0.5s ease-out;
 }
-
-.slide-fade-enter {
-  transform: translateX(10px);
-  opacity: 0;
-}
 </style>

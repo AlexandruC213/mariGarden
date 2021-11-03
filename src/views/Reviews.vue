@@ -1,23 +1,29 @@
 <template>
-  <div class="container-reviews">
-    <div class="tabs">
-      <span
-        v-for="(tab, index) in tabs"
-        :key="index"
-        :class="currentActiveTab(tab)"
-        @click="changeTab(tab)"
-        >{{ tab }}</span
-      >
+  <transition name="fade-in" appear>
+    <div class="container-reviews">
+      <div class="tabs">
+        <span
+          v-for="(tab, index) in tabs"
+          :key="index"
+          :class="currentActiveTab(tab)"
+          @click="changeTab(tab)"
+          >{{ tab }}</span
+        >
+      </div>
+
+      <transition name="slide-tab-left">
+        <DisplayReviews
+          v-if="displayTab('Reviews')"
+          class="reviewsTab"
+          :reviews="reviews"
+        />
+      </transition>
+
+      <transition name="slide-tab-right">
+        <MakeReview v-if="displayTab('Make a Review')" class="makeReview" />
+      </transition>
     </div>
-
-    <DisplayReviews
-      v-show="displayTab('Reviews')"
-      class="reviewsTab"
-      :reviews="reviews"
-    />
-
-    <MakeReview v-show="displayTab('Make a Review')" class="makeReview" />
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -34,6 +40,8 @@ export default {
     return {
       tabs: ["Reviews", "Make a Review"],
       selectedTab: "Reviews",
+      test1: 1,
+      test2: 2,
     };
   },
   methods: {
@@ -99,5 +107,30 @@ export default {
 
 .active {
   color: var(--green);
+}
+
+/* Transitions*/
+
+.fade-in-enter {
+  opacity: 0;
+}
+
+.fade-in-enter-active {
+  transition: opacity 0.5s ease-in;
+}
+
+.slide-tab-left-enter {
+  transform: translateX(-50px);
+  opacity: 0;
+}
+
+.slide-tab-left-enter-active,
+.slide-tab-right-enter-active {
+  transition: all 0.5s ease-in;
+}
+
+.slide-tab-right-enter {
+  transform: translateX(50px);
+  opacity: 0;
 }
 </style>

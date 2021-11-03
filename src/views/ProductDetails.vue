@@ -1,42 +1,44 @@
 <template>
-  <div class="page-container">
-    <div class="productDetails-container">
-      <div
-        class="image-container"
-        :style="{ backgroundImage: `url(${product.image})` }"
-      >
-        <div class="details-container">
-          <div class="title-price">
-            <p>{{ product.title }}</p>
-            <p>${{ product.price | rating }}</p>
-          </div>
-          <div class="description">
-            <p>{{ product.longDesc }}</p>
-          </div>
-          <div class="rating-btnBuy">
-            <p v-if="productReviewsLength">
-              Rating: {{ productRating | rating }}/5
-            </p>
-            <p v-else>This product has no rating yet</p>
-            <button @click="addProd">
-              <i class="fas fa-shopping-cart"></i> Buy
-            </button>
+  <transition name="fade-in" mode="in-out" appear>
+    <div class="page-container">
+      <div class="productDetails-container">
+        <div
+          class="image-container"
+          :style="{ backgroundImage: `url(${product.image})` }"
+        >
+          <div class="details-container">
+            <div class="title-price">
+              <p>{{ product.title }}</p>
+              <p>${{ product.price | rating }}</p>
+            </div>
+            <div class="description">
+              <p>{{ product.longDesc }}</p>
+            </div>
+            <div class="rating-btnBuy">
+              <p v-if="productReviewsLength">
+                Rating: {{ productRating | rating }}/5
+              </p>
+              <p v-else>This product has no rating yet</p>
+              <button @click="addProd">
+                <i class="fas fa-shopping-cart"></i> Buy
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="reviews-container" ref="reviews" v-if="productReviewsLength">
-      <div class="loading-container" v-show="loading">
-        <div class="loading">
-          <span class="fas fa-spinner fa-spin"></span> Loading
+      <div class="reviews-container" ref="reviews" v-if="productReviewsLength">
+        <div class="loading-container" v-show="loading">
+          <div class="loading">
+            <span class="fas fa-spinner fa-spin"></span> Loading
+          </div>
         </div>
+        <DisplayReviews :reviews="tempReviews" :reviewsProduct="true" />
       </div>
-      <DisplayReviews :reviews="tempReviews" :reviewsProduct="true" />
+      <div v-else class="no-reviews">
+        <p>This product Has no reviews yet!</p>
+      </div>
     </div>
-    <div v-else class="no-reviews">
-      <p>This product Has no reviews yet!</p>
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script>

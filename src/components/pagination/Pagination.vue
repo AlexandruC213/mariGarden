@@ -9,9 +9,13 @@
       ><i class="fas fa-arrow-left"></i
     ></router-link>
 
-    <PageLinks v-for="page in numberOfPages" :key="page" :page="page">{{
-      page
-    }}</PageLinks>
+    <PageLinks
+      v-for="page in numberOfPages"
+      :key="page"
+      :page="page"
+      :class="{ active: disabledPrev }"
+      >{{ page }}</PageLinks
+    >
 
     <router-link
       :to="{ name: 'home', query: { page: this.currentPage + 1 } }"
@@ -91,7 +95,11 @@ export default {
 }
 
 .pagination-container a.router-link-exact-active {
-  border-radius: 50%;
+  background-color: var(--green);
+  color: var(--white);
+}
+
+.active:nth-child(2) {
   background-color: var(--green);
   color: var(--white);
 }

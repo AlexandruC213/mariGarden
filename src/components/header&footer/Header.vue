@@ -16,9 +16,15 @@
       <div class="cart-container">
         <Cart class="cart">
           <BaseButton slot="button" @click="showCart" buttonClass="btn-cart">
-            <span class="number-products" v-show="numberItems > 0">{{
-              numberItems
-            }}</span>
+            <transition name="zoom-in" mode="out-in">
+              <span
+                :key="numberItems"
+                v-if="numberItems > 0"
+                class="number-products"
+                >{{ numberItems }}</span
+              >
+              <!-- v-show="numberItems > 0" -->
+            </transition>
             <i class="fas fa-shopping-cart"></i
           ></BaseButton>
           <transition slot="content" name="fade">
@@ -184,7 +190,7 @@ export default {
   min-height: 80px;
 
   padding: 0px 16px;
-  margin: 5px 0;
+  margin: 0 auto;
 
   display: flex;
   justify-content: center;
@@ -240,5 +246,30 @@ export default {
 .cart-content .cart-checkout .total p {
   font-size: 1.25rem;
   font-weight: 600;
+}
+
+.number-products {
+  width: 18px;
+  height: 18px;
+
+  position: absolute;
+  top: 1px;
+  left: 0;
+  font-size: 1rem;
+
+  border-radius: 50%;
+  background-color: var(--orange);
+}
+
+/* Transitions */
+
+.zoom-in-enter,
+.zoom-in-leave-to {
+  transform: scale(1.5);
+  color: rgba(0, 0, 0, 0.5);
+}
+.zoom-in-enter-active,
+.zoom-in-leave-active {
+  transition: all 0.3s ease-in;
 }
 </style>

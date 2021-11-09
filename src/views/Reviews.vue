@@ -40,8 +40,6 @@ export default {
     return {
       tabs: ["Reviews", "Make a Review"],
       selectedTab: "Reviews",
-      test1: 1,
-      test2: 2,
     };
   },
   methods: {

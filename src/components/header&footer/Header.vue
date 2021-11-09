@@ -23,7 +23,6 @@
                 class="number-products"
                 >{{ numberItems }}</span
               >
-              <!-- v-show="numberItems > 0" -->
             </transition>
             <i class="fas fa-shopping-cart"></i
           ></BaseButton>

@@ -66,6 +66,7 @@ export const actions = {
   },
 
   setProductReviews({ commit, state, dispatch }) {
+    // selectedProduct.reviews este empty si nu ar trebui sa fie
     return EventServices.fetchProductReviews(state.currentProduct.title)
       .then((response) => {
         commit("SET_PRODUCT_REVIEWS", response.data);

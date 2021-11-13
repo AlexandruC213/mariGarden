@@ -1,7 +1,7 @@
 <template>
   <div class="pagination-container">
     <router-link
-      :to="{ name: checkPage, query: { page: this.currentPage - 1 } }"
+      :to="{ name: 'home', query: { page: this.currentPage - 1 } }"
       rel="prev"
       tag="button"
       :disabled="disabledPrev"
@@ -13,12 +13,12 @@
       v-for="page in numberOfPages"
       :key="page"
       :page="page"
-      :checkPage="checkPage"
+      :class="{ active: disabledPrev }"
       >{{ page }}</PageLinks
     >
 
     <router-link
-      :to="{ name: checkPage, query: { page: this.currentPage + 1 } }"
+      :to="{ name: 'home', query: { page: this.currentPage + 1 } }"
       rel="next"
       tag="button"
       :disabled="disabledNext"
@@ -95,7 +95,11 @@ export default {
 }
 
 .pagination-container a.router-link-exact-active {
-  border-radius: 50%;
+  background-color: var(--green);
+  color: var(--white);
+}
+
+.active:nth-child(2) {
   background-color: var(--green);
   color: var(--white);
 }

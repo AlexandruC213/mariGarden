@@ -1,41 +1,50 @@
 <template>
-  <div class="page-container">
-    <div class="productDetails-container">
-      <div
-        class="image-container"
-        :style="{ backgroundImage: `url(${product.image})` }"
-      >
-        <div class="details-container">
-          <div class="title-price">
-            <p>{{ product.title }}</p>
-            <p>{{ product.price }}</p>
-          </div>
-          <div class="description">
-            <p>{{ product.longDesc }}</p>
-          </div>
-          <div class="rating-btnBuy">
-            <p v-if="productReviewsLength">Rating: {{ productRating }}/5</p>
-            <p v-else>This product has no rating yet</p>
-            <button @click="addProd">
-              <i class="fas fa-shopping-cart"></i> Buy
-            </button>
+  <transition name="fade-in" mode="in-out" appear>
+    <div class="page-container">
+      <div class="productDetails-container">
+        <div
+          class="image-container"
+          :style="{ backgroundImage: `url(${product.image})` }"
+        >
+          <div class="details-container">
+            <div class="title-price">
+              <p>{{ product.title }}</p>
+              <p>${{ product.price | rating }}</p>
+            </div>
+            <div class="description">
+              <p>{{ product.longDesc }}</p>
+            </div>
+            <div class="rating-btnBuy">
+              <p v-if="productReviewsLength">
+                Rating: {{ productRating | rating }}/5
+              </p>
+              <p v-else>This product has no rating yet</p>
+              <button @click="addProd">
+                <i class="fas fa-shopping-cart"></i> Buy
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <div class="reviews-container" ref="reviews" v-if="productReviewsLength">
+        <div class="loading-container" v-show="loading">
+          <div class="loading">
+            <span class="fas fa-spinner fa-spin"></span> Loading
+          </div>
+        </div>
+        <DisplayReviews :reviews="tempReviews" :reviewsProduct="true" />
+      </div>
+      <div v-else class="no-reviews">
+        <p>This product Has no reviews yet!</p>
+      </div>
     </div>
-    <div class="reviews-container" ref="reviews">
-      <!-- @scroll="loadMoreReviews" -->
-      <DisplayReviews :reviews="product.reviews" />
-    </div>
-    <!-- <div v-else class="no-reviews">
-      <p>This Product Has no reviews yet!</p>
-    </div> -->
-  </div>
+  </transition>
 </template>
 
 <script>
 import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
 import { mapState, mapActions } from "vuex";
+import store from "@/store/index";
 
 export default {
   props: {
@@ -44,42 +53,47 @@ export default {
       required: true,
     },
   },
+  beforeRouteEnter(routeTo, routeFrom, next) {
+    store.dispatch("product/setProductReviews").then(() => {
+      next();
+    });
+  },
   components: {
     DisplayReviews,
   },
   data() {
     return {
+      loading: false,
       tempReviews: [],
       reviewsPerScroll: 2,
-      scrollTimes: 1,
+      scrollTimes: 2,
     };
   },
   methods: {
     addProd() {
       this.addProduct(this.product);
     },
-    // loadMoreReviews() {
-    //   const reviewsList = this.$refs.reviews;
-    //   console.log(this.reviewsList);
-    //   if (
-    //     reviewsList.scrollTop + reviewsList.clientHeight >=
-    //     reviewsList.scrollHeight
-    //   ) {
-    //     const limit = this.product.reviews.length / 2;
-    //     setTimeout(() => {
-    //       if (this.scrollTimes <= limit) {
-    //         this.tempReviews = this.product.reviews.slice(
-    //           0,
-    //           this.reviewsPerScroll * this.scrollTimes
-    //         );
-    //         this.scrollTimes++;
-    //       }
-    //     }, 500);
-    //   }
-    // },
+    loadMoreReviews() {
+      const that = this;
+      window.onscroll = function () {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          const limit = Math.ceil(that.product.reviews.length / 2);
+          that.loading = that.scrollTimes <= limit ? true : false;
+          setTimeout(() => {
+            if (that.scrollTimes <= limit) {
+              const coppyReviews = [...that.product.reviews];
+              that.tempReviews = coppyReviews
+                .reverse()
+                .slice(0, that.reviewsPerScroll * that.scrollTimes);
+              that.scrollTimes++;
+              that.loading = false;
+            }
+          }, 500);
+        }
+      };
+    },
     ...mapActions({
       addProduct: "cart/addProduct",
-      getProduct: "product/getProduct",
     }),
   },
   computed: {
@@ -89,20 +103,21 @@ export default {
       for (const review of this.product.reviews) {
         rating += review.rating;
       }
-      return (rating / this.product.reviews.length).toFixed(2);
+      return rating / this.product.reviews.length;
     },
     productReviewsLength() {
-      return this.product.reviews.length > 0;
+      return this.product.reviews.length;
     },
     ...mapState({
       product: (state) => state.product.currentProduct,
     }),
   },
-  created() {
-    this.getProduct(this.id);
-  },
   mounted() {
-    // this.loadMoreReviews();
+    if (this.productReviewsLength) {
+      const coppyReviews = [...this.product.reviews];
+      this.tempReviews = coppyReviews.reverse().slice(0, this.reviewsPerScroll);
+      this.loadMoreReviews();
+    }
   },
 };
 </script>
@@ -119,9 +134,30 @@ export default {
 
 .page-container .reviews-container {
   width: 90%;
-  height: 30vh;
-  overflow: auto;
   margin: 50px 0 75px 0;
+  position: relative;
+}
+
+.page-container .reviews-container .loading-container {
+  width: 100%;
+  height: calc(100% - 20px);
+  text-align: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 2;
+}
+
+.page-container .reviews-container .loading-container .loading {
+  color: #fff;
+  background-color: var(--green);
+  padding: 10px 20px;
+  border-radius: 5px;
 }
 
 .page-container .no-reviews {

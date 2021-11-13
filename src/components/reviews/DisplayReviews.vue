@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="review" v-for="review in reviews" :key="review.id">
+    <div class="review" v-for="review in recentReviews" :key="review.id">
       <div>
         <p class="title">{{ review.title }}</p>
         <p class="product">Product: {{ review.productSelected }}</p>
@@ -18,7 +18,22 @@
 <script>
 export default {
   props: {
-    reviews: Array,
+    reviews: {
+      type: Array,
+      required: true,
+    },
+    reviewsProduct: {
+      type: Boolean,
+    }
+  },
+  computed: {
+    recentReviews() {
+      if (!this.reviewsProduct) {
+        const coppyReviews = [...this.reviews];
+        return coppyReviews.reverse();
+      }
+      return this.reviews;
+    }
   },
 };
 </script>

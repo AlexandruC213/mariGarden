@@ -1,12 +1,6 @@
 <template>
   <div>
-    <slot name="button">
-      <slot name="type">
-        <template>
-          <!-- Here is the content button for the slot -->
-        </template>
-      </slot>
-    </slot>
+    <slot name="button"> </slot>
 
     <slot name="content">
       <template>

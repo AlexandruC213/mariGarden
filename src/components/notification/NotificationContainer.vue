@@ -1,11 +1,11 @@
 <template>
-  <div class="notification-container">
+  <transition-group name="fade-list" tag="div" class="notification-container">
     <Notification
       v-for="notification in notifications"
       :key="notification.id"
       :notification="notification"
     />
-  </div>
+  </transition-group>
 </template>
 
 <script>
@@ -33,5 +33,18 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 1;
+}
+
+/* Transitions */
+
+.fade-list-enter,
+.fade-list-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+.fade-list-enter-active,
+.fade-list-leave-active {
+  transition: all 0.3s ease-in;
 }
 </style>

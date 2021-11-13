@@ -17,11 +17,10 @@ export const mutations = {
 
 export const actions = {
   getReviews({ commit, dispatch, state }) {
-    if (state.reviews.length == 0) {
+    if (!state.reviews.length) {
       return EventServices.fetchReviews()
         .then((response) => {
           commit("SET_REVIEWS", response.data);
-          return response.data;
         })
         .catch((error) => {
           const notification = {
@@ -32,14 +31,12 @@ export const actions = {
             root: true,
           });
         });
-    } else {
-      return state.reviews;
     }
   },
-  addReview({ commit, dispatch }, review) {
+  createReview({ commit, dispatch }, review) {
     return EventServices.postReview(review)
-      .then(() => {
-        commit("ADD_REVIEW", review);
+      .then((response) => {
+        commit("ADD_REVIEW", response.data);
         const notification = {
           type: "success",
           message: "Your review has been created!",

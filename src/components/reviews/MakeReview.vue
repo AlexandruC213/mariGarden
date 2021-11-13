@@ -1,48 +1,88 @@
 <template>
   <div class="form-container">
     <form @submit.prevent="createReview">
-      <div class="select">
-        <label>Select a Product</label>
-        <select v-model="review.productSelected">
-          <option v-for="product in products" :key="product.id">
-            {{ product.title }}
-          </option>
-        </select>
-      </div>
+      <Multiselect
+        class="select"
+        :label="sendLabel('Product', $v.review.productSelected.$error)"
+        :class="{ error: $v.review.productSelected.$error }"
+        :options="products"
+        placeholder="Select a product"
+        @set-title="setTitle"
+        :value="review.productSelected"
+        @close="$v.review.productSelected.$touch()"
+      />
 
-      <div class="title">
-        <label>Title</label>
-        <input v-model="review.title" type="text" />
-      </div>
+      <BaseInput
+        class="title"
+        :label="sendLabel('Title', $v.review.title.$error)"
+        :class="{ error: $v.review.title.$error }"
+        v-model="review.title"
+        placeholder="Title"
+        type="text"
+        @blur="$v.review.title.$touch()"
+      />
 
-      <div class="review">
-        <label>Review</label>
-        <textarea v-model="review.description" type="text" rows="4" />
-      </div>
+      <BaseTextarea
+        class="review"
+        :label="sendLabel('Review', $v.review.description.$error)"
+        :class="{ error: $v.review.description.$error }"
+        v-model="review.description"
+        placeholder="Enter a review"
+        type="text"
+        rows="4"
+        @blur="$v.review.description.$touch()"
+      />
 
-      <div class="rating">
-        <label>Select Rating</label>
-        <select v-model.number="review.rating">
-          <option v-for="index in 5" :key="index">{{ index }}</option>
-        </select>
-      </div>
+      <BaseSelect
+        class="rating"
+        :label="sendLabel('Rating', $v.review.rating.$error)"
+        :class="{ error: $v.review.rating.$error }"
+        :options="rating"
+        v-model.number="review.rating"
+        :value="review.rating"
+        @blur="$v.review.rating.$touch()"
+      />
 
-      <button type="Submit">Submit</button>
+      <BaseButton
+        type="submit"
+        buttonClass="make-a-review"
+        :disabled="$v.$anyError"
+        >{{ disableBtn }}</BaseButton
+      >
     </form>
   </div>
 </template>
 
 <script>
 import NProgress from "nprogress";
+import Multiselect from "@/components/reviews/Multiselect.vue";
+import { required } from "vuelidate/lib/validators";
 import { mapState } from "vuex";
 
 export default {
+  components: {
+    Multiselect,
+  },
   data() {
     return {
+      rating: [1, 2, 3, 4, 5],
       review: this.createFreshReviewObject(),
     };
   },
+  validations: {
+    review: {
+      productSelected: { required },
+      title: { required },
+      description: { required },
+      rating: { required: required },
+    },
+  },
   computed: {
+    disableBtn() {
+      return this.$v.$anyError
+        ? "Please fill out the required field(s)!"
+        : "Submit";
+    },
     ...mapState({
       products: (state) => state.product.products,
     }),
@@ -53,20 +93,29 @@ export default {
         productSelected: "",
         title: "",
         description: "",
-        rating: 0,
+        rating: null,
       };
     },
     createReview() {
-      NProgress.start();
-      this.$store
-        .dispatch("review/addReview", this.review)
-        .then(() => {
-          this.$router.go();
-          this.review = this.createFreshReviewObject();
-        })
-        .catch(() => {
-          NProgress.done();
-        });
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        NProgress.start();
+        this.$store
+          .dispatch("review/createReview", this.review)
+          .then(() => {
+            this.$router.go();
+            this.review = this.createFreshReviewObject();
+          })
+          .catch(() => {
+            NProgress.done();
+          });
+      }
+    },
+    setTitle(title) {
+      this.review.productSelected = title;
+    },
+    sendLabel(field, condition) {
+      return condition ? `${field} is required!` : field;
     },
   },
 };
@@ -74,7 +123,7 @@ export default {
 
 <style scoped>
 .form-container {
-  height: 40vh;
+  height: 50vh;
 }
 
 .form-container form {
@@ -93,44 +142,11 @@ export default {
   font-size: 1.25rem;
 }
 
-.form-container .select select option,
-.form-container .select select,
-.form-container .rating select,
-.form-container .rating select option,
-.form-container .title input,
-.form-container .review textarea {
-  font-size: 1rem;
+.error {
+  color: red;
 }
 
-.form-container .title input,
-.form-container .review textarea {
-  padding: 3px 5px;
-}
-
-.form-container .select select option,
-.form-container .rating select option {
-  text-align: center;
-}
-
-.form-container .title input {
-  outline: none;
-  height: 24px;
-}
-
-.form-container .review textarea {
-  outline: none;
-}
-
-.form-container button {
-  background-color: var(--orange);
-  border: none;
-  padding: 5px 0;
-  font-size: 1.25rem;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.form-container button:hover {
-  background-color: rgba(255, 193, 7, 0.8);
+.btnError {
+  background-color: red;
 }
 </style>

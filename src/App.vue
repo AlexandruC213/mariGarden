@@ -71,4 +71,16 @@ export default {
   text-decoration: none;
   color: var(--green);
 }
+
+/*** TRANSITIONS ***/
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-out;
+}
 </style>

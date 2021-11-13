@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import NProgress from "nprogress";
+import store from "@/store/index";
 
 Vue.use(VueRouter);
 
@@ -10,6 +11,7 @@ const routes = [
     path: "/",
     name: "home",
     component: Home,
+    props: true,
   },
   {
     path: "/products",
@@ -21,6 +23,11 @@ const routes = [
     name: "details",
     component: () => import("../views/ProductDetails.vue"),
     props: true,
+    beforeEnter(routeTo, routeFrom, next) {
+      store.dispatch("product/getProduct", routeTo.params.id).then(() => {
+        next();
+      });
+    },
   },
   {
     path: "/checkout",
@@ -51,9 +58,15 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
-  // scrollBehavior() {
-  //   return { x: 0, y: 0 };
-  // },
+  scrollBehavior(routeTo) {
+    if (routeTo.name === "details") {
+      return { x: 0, y: 0 };
+    }
+    const key = Object.keys(routeTo.query);
+    return key.length
+      ? { selector: routeTo.query }
+      : { x: 0, y: 0, behavior: "smooth" };
+  },
   routes,
 });
 

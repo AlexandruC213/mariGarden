@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="product-list-container">
-      <ProductList />
+      <ProductList :animationType="animationType" />
     </div>
   </div>
 </template>
@@ -20,7 +20,7 @@
 import ProductList from "@/components/products/ProductList.vue";
 import store from "@/store/index";
 
-function getPageProductsAndReviews(routeTo, next) {
+function getPageProducts(routeTo, next) {
   const currentPage = parseInt(routeTo.query.page) || 1;
   store.dispatch("product/getProducts").then(() => {
     routeTo.params.page = currentPage;
@@ -30,14 +30,22 @@ function getPageProductsAndReviews(routeTo, next) {
 }
 
 export default {
+  props: {
+    animationType: {
+      type: String,
+    },
+  },
   components: {
     ProductList,
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    getPageProductsAndReviews(routeTo, next);
+    getPageProducts(routeTo, next);
   },
   beforeRouteUpdate(routeTo, routeFrom, next) {
-    getPageProductsAndReviews(routeTo, next);
+    routeTo.query.page > (routeFrom.query.page || 1)
+      ? (routeTo.params.animationType = "100")
+      : (routeTo.params.animationType = "-100");
+    getPageProducts(routeTo, next);
   },
 };
 </script>

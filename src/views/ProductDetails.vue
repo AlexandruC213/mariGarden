@@ -85,6 +85,7 @@ export default {
   computed: {
     productRating() {
       let rating = null;
+      console.log(this.product.reviews);
       for (const review of this.product.reviews) {
         rating += review.rating;
       }

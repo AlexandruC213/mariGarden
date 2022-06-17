@@ -18,7 +18,7 @@
           <router-link :to="{ name: 'details', params: { id: product.id } }">
             <BaseButton buttonClass="btn-details">Details</BaseButton>
           </router-link>
-          <BaseButton @click="addProd">Add to Cart</BaseButton>
+          <BaseButton @click="addProduct(product)">Add to Cart</BaseButton>
         </div>
       </div>
     </div>
@@ -26,21 +26,17 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   props: {
     product: Object,
   },
   methods: {
-    addProd() {
-      this.addProduct(this.product);
-    },
     ...mapActions({
       addProduct: "cart/addProduct",
     }),
   },
-  computed: mapState(["cart"]),
 };
 </script>
 

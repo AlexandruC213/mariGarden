@@ -44,7 +44,6 @@
 <script>
 import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
 import { mapState, mapActions } from "vuex";
-import store from "@/store/index";
 
 export default {
   props: {
@@ -52,11 +51,6 @@ export default {
       type: [String, Number],
       required: true,
     },
-  },
-  beforeRouteEnter(routeTo, routeFrom, next) {
-    store.dispatch("product/setProductReviews").then(() => {
-      next();
-    });
   },
   components: {
     DisplayReviews,
@@ -67,6 +61,7 @@ export default {
       tempReviews: [],
       reviewsPerScroll: 2,
       scrollTimes: 2,
+      rating: 0,
     };
   },
   methods: {

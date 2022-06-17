@@ -18,29 +18,25 @@ export const mutations = {
   SET_LAST_PAGE(state, page) {
     state.lastLoadedPage = page;
   },
-  SET_PRODUCT_REVIEWS(state, reviews) {
-    state.currentProduct.reviews = [...reviews];
-  },
 };
 
 export const actions = {
-  getProducts({ commit, dispatch, state }) {
-    if (!state.products.length) {
-      return EventServices.fetchProducts()
-        .then((response) => {
-          commit("SET_PRODUCTS", response.data);
-        })
-        .catch((error) => {
-          const notification = {
-            type: "error",
-            message:
-              "There was a problem fetching the products: " + error.message,
-          };
-          dispatch("notification/addNotification", notification, {
-            root: true,
-          });
+  getProducts({ commit, dispatch }) {
+    return EventServices.fetchProducts()
+      .then((response) => {
+        commit("SET_PRODUCTS", response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        const notification = {
+          type: "error",
+          message:
+            "There was a problem fetching the products: " + error.message,
+        };
+        dispatch("notification/addNotification", notification, {
+          root: true,
         });
-    }
+      });
   },
 
   getProduct({ commit, getters, dispatch }, id) {
@@ -50,6 +46,7 @@ export const actions = {
     } else {
       return EventServices.fetchProduct(id)
         .then((response) => {
+          console.log(response.data);
           commit("SET_PRODUCT", response.data);
         })
         .catch((error) => {
@@ -63,25 +60,6 @@ export const actions = {
           });
         });
     }
-  },
-
-  setProductReviews({ commit, state, dispatch }) {
-    // selectedProduct.reviews este empty si nu ar trebui sa fie
-    return EventServices.fetchProductReviews(state.currentProduct.title)
-      .then((response) => {
-        commit("SET_PRODUCT_REVIEWS", response.data);
-      })
-      .catch((error) => {
-        const notification = {
-          type: "error",
-          message:
-            "There was a problem fetching the reviews for this product: " +
-            error.message,
-        };
-        dispatch("notification/addNotification", notification, {
-          root: true,
-        });
-      });
   },
 
   setPage({ commit }, page) {

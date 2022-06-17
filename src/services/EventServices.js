@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL:
+    "https://mari-garden-default-rtdb.europe-west1.firebasedatabase.app/",
   withCredentials: false,
   headers: {
-    Accept: "appliction/json",
+    Accept: "application/json",
     "Content-Type": "application/json",
   },
   timeout: 10000,
@@ -12,18 +13,13 @@ const apiClient = axios.create({
 
 export default {
   fetchProducts() {
-    return apiClient.get("/products");
+    return apiClient.get("/products.json");
   },
   fetchProduct(id) {
-    return apiClient.get("/products/" + id);
+    const newId = id - 1;
+    return apiClient.get("/products/" + newId + ".json");
   },
   fetchReviews() {
-    return apiClient.get("/reviews");
-  },
-  fetchProductReviews(productName) {
-    return apiClient.get("/reviews?productSelected=" + productName);
-  },
-  postReview(review) {
-    return apiClient.post("/reviews/", review);
+    return apiClient.get("/reviews.json");
   },
 };

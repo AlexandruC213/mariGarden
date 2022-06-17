@@ -6,11 +6,9 @@
       <SocialIcon><i class="fab fa-linkedin"></i></SocialIcon>
       <SocialIcon><i class="fab fa-instagram"></i></SocialIcon>
     </div>
-    <div class="details">
-      <p>This is the Footer!</p>
-    </div>
+    <div class="details"></div>
     <div class="credits">
-      <p>2021 - Mari Garden</p>
+      <p>2022 - Mari Garden</p>
     </div>
   </div>
 </template>

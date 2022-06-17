@@ -107,7 +107,6 @@ export default {
     ...mapGetters("cart", ["calculateTotal"]),
     ...mapState({
       cartItems: (state) => state.cart.cartItems,
-      total: (state) => state.cart.total,
     }),
   },
 };

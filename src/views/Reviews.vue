@@ -2,43 +2,29 @@
   <transition name="fade-in" appear>
     <div class="container-reviews">
       <div class="tabs">
-        <span
-          v-for="(tab, index) in tabs"
-          :key="index"
-          :class="currentActiveTab(tab)"
-          @click="changeTab(tab)"
-          >{{ tab }}</span
-        >
+        <span class="active">Reviews</span>
       </div>
 
-      <transition name="slide-tab-left">
-        <DisplayReviews
-          v-if="displayTab('Reviews')"
-          class="reviewsTab"
-          :reviews="reviews"
-        />
-      </transition>
-
-      <transition name="slide-tab-right">
-        <MakeReview v-if="displayTab('Make a Review')" class="makeReview" />
-      </transition>
+      <DisplayReviews
+        v-if="displayTab('Reviews')"
+        class="reviewsTab"
+        :reviews="reviews"
+      />
     </div>
   </transition>
 </template>
 
 <script>
 import DisplayReviews from "@/components/reviews/DisplayReviews.vue";
-import MakeReview from "@/components/reviews/MakeReview.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
     DisplayReviews,
-    MakeReview,
   },
   data() {
     return {
-      tabs: ["Reviews", "Make a Review"],
+      tabs: ["Reviews"],
       selectedTab: "Reviews",
     };
   },
@@ -115,20 +101,5 @@ export default {
 
 .fade-in-enter-active {
   transition: opacity 0.5s ease-in;
-}
-
-.slide-tab-left-enter {
-  transform: translateX(-50px);
-  opacity: 0;
-}
-
-.slide-tab-left-enter-active,
-.slide-tab-right-enter-active {
-  transition: all 0.5s ease-in;
-}
-
-.slide-tab-right-enter {
-  transform: translateX(50px);
-  opacity: 0;
 }
 </style>

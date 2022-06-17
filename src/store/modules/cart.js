@@ -15,9 +15,6 @@ export const mutations = {
   DECREASE_QUANTITY(state, index) {
     state.cartItems[index].quantity--;
   },
-  CALCULATE_TOTAL(state, total) {
-    state.total = total;
-  },
   DELETE_PRODUCT_FROM_CART(state, index) {
     state.cartItems.splice(index, 1);
   },

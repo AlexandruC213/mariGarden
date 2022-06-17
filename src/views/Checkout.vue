@@ -16,10 +16,8 @@
       </div>
       <div>
         <select name="payment" id="payment" v-model="payment">
-          <option value="null" selected hidden>Payment Method</option>
-          <option>Cash at delivery</option>
-          <option>Credit/Debit Card</option>
-          <option>Google Pay</option>
+          <option value="null" selected hidden>Select payment type</option>
+          <option value="cash">Cash at delivery</option>
         </select>
       </div>
       <div class="btn-container">
@@ -42,7 +40,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      if (this.errors.length === 3) {
+      if (this.errors.length) {
         this.errors = [];
       }
       if (this.name && this.email && this.payment) {
@@ -52,6 +50,7 @@ export default {
           payment: this.payment,
         };
         this.orders.push(order);
+        // console.log(this.orders);
         this.name = null;
         this.email = null;
         this.payment = null;

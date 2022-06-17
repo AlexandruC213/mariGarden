@@ -33,6 +33,10 @@ export default {
   font-family: "Roboto", sans-serif;
 }
 
+.border {
+  border: 1px solid red;
+}
+
 :root {
   --green: #2e7d32;
   --white: #fff;

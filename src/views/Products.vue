@@ -136,7 +136,7 @@ export default {
 
 /*** Animations ***/
 
-.slide-down-enter {
+.r-down-enter {
   opacity: 0;
   transform: translateY(-30px);
 }

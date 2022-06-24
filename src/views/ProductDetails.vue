@@ -16,7 +16,7 @@
             </div>
             <div class="rating-btnBuy">
               <p v-if="productReviewsLength">
-                Rating: {{ productRating | rating }}/5
+                Rating: {{ productRating | rating }}/5.00
               </p>
               <p v-else>This product has no rating yet</p>
               <button @click="addProd">

@@ -5,12 +5,9 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "nprogress/nprogress.css";
-import Vuelidate from "vuelidate";
 import RatingFilter from "./filters/rating";
 
 Vue.filter("rating", RatingFilter);
-
-Vue.use(Vuelidate);
 
 Vue.config.productionTip = false;
 

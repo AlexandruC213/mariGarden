@@ -50,7 +50,6 @@ export default {
           payment: this.payment,
         };
         this.orders.push(order);
-        // console.log(this.orders);
         this.name = null;
         this.email = null;
         this.payment = null;
